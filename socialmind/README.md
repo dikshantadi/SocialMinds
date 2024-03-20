@@ -1,6 +1,6 @@
 # socialmind
 
-A new Flutter project.
+A Simple Social Media project. Will be made with flutter. 
 
 ## Getting Started
 
