@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:socialmind/Frontend/onboarding1.dart';
 import 'package:socialmind/Frontend/onboarding2.dart';
 import 'package:socialmind/Frontend/onboarding3.dart';
-import 'Login.dart';
+import 'Login/Login.dart';
 
 class StartPage extends StatefulWidget {
   const StartPage({Key? key}) : super(key: key);
