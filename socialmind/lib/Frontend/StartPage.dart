@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'package:flutter/material.dart';
+import 'package:socialmind/Frontend/Login/mainpg.dart';
 import 'package:socialmind/Frontend/onboarding1.dart';
 import 'package:socialmind/Frontend/onboarding2.dart';
 import 'package:socialmind/Frontend/onboarding3.dart';
@@ -57,7 +58,7 @@ class _StartPageState extends State<StartPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => LoginPage()),
+                                builder: (context) => Welcomepg()),
                           );
                         },
                         child: Text('Start'),
