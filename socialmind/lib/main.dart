@@ -13,6 +13,8 @@ void main() async {
             appId: Constants.appId,
             messagingSenderId: Constants.messageSenderId,
             projectId: Constants.projectId));
+  } else {
+    await Firebase.initializeApp();
   }
   runApp(const MyApp());
 }

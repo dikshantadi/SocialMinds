@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "221513340811",
+    "project_id": "socialminds-34a74",
+    "storage_bucket": "socialminds-34a74.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:221513340811:android:1f688eb5ee5fbc09bf418e",
+        "android_client_info": {
+          "package_name": "com.example.socialmind"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBBNuw1EPVW9vo8b6Q-OPWyHUZvNmR6Rw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
