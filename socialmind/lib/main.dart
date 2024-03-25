@@ -2,20 +2,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:socialmind/Frontend/StartPage.dart';
+import 'package:socialmind/firebase_options.dart';
 import 'shared/constants.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (kIsWeb) {
-    await Firebase.initializeApp(
-        options: FirebaseOptions(
-            apiKey: Constants.apiKey,
-            appId: Constants.appId,
-            messagingSenderId: Constants.messageSenderId,
-            projectId: Constants.projectId));
-  } else {
-    await Firebase.initializeApp();
-  }
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
