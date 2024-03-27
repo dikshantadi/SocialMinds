@@ -29,7 +29,9 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   animate_do: ^3.3.4
+  cloud_firestore: ^4.15.10
   cupertino_icons: ^1.0.6
+  firebase_auth: ^4.18.0
   firebase_core: ^2.27.1
   flutter:
     sdk: flutter
