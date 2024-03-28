@@ -20,6 +20,7 @@ class _SignupState extends State<Signup> {
     'assets/Smd.json',
     'assets/Chatbot.json'
   ];
+  late Timer _timer;
 
   @override
   void initState() {
@@ -28,12 +29,19 @@ class _SignupState extends State<Signup> {
   }
 
   startTimer() {
-    Timer.periodic(Duration(seconds: 5), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
       setState(() {
         activeIndex++;
         if (activeIndex == _images.length) activeIndex = 0;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    // Cancel the timer when the widget is disposed
+    _timer.cancel();
+    super.dispose();
   }
 
   @override
