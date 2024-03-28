@@ -30,6 +30,7 @@ environment:
 dependencies:
   animate_do: ^3.3.4
   cupertino_icons: ^1.0.6
+  curved_navigation_bar_with_label: ^2.1.4
   firebase_core: ^2.27.1
   flutter:
     sdk: flutter

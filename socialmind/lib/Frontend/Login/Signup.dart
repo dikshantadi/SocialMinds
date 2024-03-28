@@ -15,11 +15,7 @@ class Signup extends StatefulWidget {
 
 class _SignupState extends State<Signup> {
   int activeIndex = 0;
-  final List<String> _images = [
-    'assets/AII.json',
-    'assets/Smd.json',
-    'assets/Chatbot.json'
-  ];
+  final List<String> _images = ['assets/Chatbot.json'];
   late Timer _timer;
 
   @override
@@ -43,6 +39,8 @@ class _SignupState extends State<Signup> {
     _timer.cancel();
     super.dispose();
   }
+
+  bool _passwordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -83,8 +81,8 @@ class _SignupState extends State<Signup> {
                   duration: Duration(milliseconds: 1500),
                   child: TextField(
                     decoration: InputDecoration(
-                        labelText: "Email",
-                        hintText: "Email or Username",
+                        labelText: "Username",
+                        hintText: "Username",
                         labelStyle: TextStyle(
                             color: Colors.black,
                             fontSize: 14,
@@ -116,6 +114,40 @@ class _SignupState extends State<Signup> {
                   duration: Duration(milliseconds: 1500),
                   child: TextField(
                     decoration: InputDecoration(
+                        labelText: "Email",
+                        hintText: "Email",
+                        labelStyle: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400),
+                        prefixIcon: Icon(
+                          Icons.mail_outline,
+                          color: Colors.black,
+                          size: 18,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Colors.grey.shade200, width: 2),
+                            borderRadius: BorderRadius.circular(10)),
+                        floatingLabelStyle: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.black, width: 1.5),
+                          borderRadius: BorderRadius.circular(10),
+                        )),
+                  )),
+              SizedBox(
+                height: 40,
+              ),
+              FadeInUp(
+                  delay: Duration(milliseconds: 800),
+                  duration: Duration(milliseconds: 1500),
+                  child: TextField(
+                    obscureText: !_passwordVisible,
+                    decoration: InputDecoration(
                         labelText: "Password",
                         hintText: 'Password',
                         labelStyle: TextStyle(
@@ -126,6 +158,19 @@ class _SignupState extends State<Signup> {
                           Iconsax.key,
                           color: Colors.black,
                           size: 18,
+                        ),
+                        suffixIcon: InkWell(
+                          onTap: () {
+                            setState(() {
+                              _passwordVisible = !_passwordVisible;
+                            });
+                          },
+                          child: Icon(
+                            _passwordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            size: 18,
+                          ),
                         ),
                         enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -144,18 +189,7 @@ class _SignupState extends State<Signup> {
               FadeInUp(
                   child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        "Forgot Password?",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ))
-                ],
+                children: [],
               )),
               SizedBox(
                 height: 30,
@@ -169,7 +203,7 @@ class _SignupState extends State<Signup> {
                       borderRadius: BorderRadius.circular(10)),
                   color: Colors.black,
                   child: Text(
-                    'Login',
+                    'SignUp',
                     style: TextStyle(
                       color: Colors.white,
                     ),
@@ -184,25 +218,7 @@ class _SignupState extends State<Signup> {
                 duration: Duration(milliseconds: 1500),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Dont have an account?',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Register',
-                          style: TextStyle(
-                              color: Colors.blue,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w400),
-                        ))
-                  ],
+                  children: [],
                 ),
               )
             ],

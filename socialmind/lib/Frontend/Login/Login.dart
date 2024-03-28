@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:socialmind/Frontend/homepg.dart';
 import 'package:socialmind/Widgets/Custom_scaffold.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:iconsax/iconsax.dart';
@@ -85,7 +86,6 @@ class _LoginPageState extends State<LoginPage> {
                     labelText: "Email",
                     hintText: "Email or Username",
                     prefixIcon: Icon(Iconsax.user, size: 18),
-                    suffixIcon: Icon(Icons.visibility, size: 18),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -151,7 +151,10 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 20),
               FadeInUp(
                 child: MaterialButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => homepg()));
+                  },
                   height: 45,
                   minWidth: double.infinity,
                   color: Colors.black,
