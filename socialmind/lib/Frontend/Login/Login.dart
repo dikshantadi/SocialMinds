@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:socialmind/Frontend/homepg.dart';
 import 'package:socialmind/Widgets/Custom_scaffold.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:iconsax/iconsax.dart';
@@ -18,8 +19,10 @@ class _LoginPageState extends State<LoginPage> {
   final List<String> _images = [
     'assets/Smd.json',
     'assets/Social net.json',
-    'assets/Social Network.json'
+    'assets/Social Network.json',
   ];
+
+  late Timer _timer;
 
   bool _passwordVisible = false;
 
@@ -30,12 +33,19 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   startTimer() {
-    Timer.periodic(Duration(seconds: 5), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
       setState(() {
         activeIndex++;
         if (activeIndex == _images.length) activeIndex = 0;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    // Cancel the timer when the widget is disposed
+    _timer.cancel();
+    super.dispose();
   }
 
   @override
@@ -76,7 +86,6 @@ class _LoginPageState extends State<LoginPage> {
                     labelText: "Email",
                     hintText: "Email or Username",
                     prefixIcon: Icon(Iconsax.user, size: 18),
-                    suffixIcon: Icon(Icons.visibility, size: 18),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -142,7 +151,10 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 20),
               FadeInUp(
                 child: MaterialButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => homepg()));
+                  },
                   height: 45,
                   minWidth: double.infinity,
                   color: Colors.black,
