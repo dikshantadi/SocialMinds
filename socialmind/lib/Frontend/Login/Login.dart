@@ -6,6 +6,8 @@ import 'package:socialmind/Frontend/homepg.dart';
 import 'package:socialmind/Widgets/Custom_scaffold.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:socialmind/Frontend/Login/Forgotpassword.dart';
+import 'package:socialmind/Frontend/Login/Signup.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -135,7 +137,10 @@ class _LoginPageState extends State<LoginPage> {
                       child: Icon(Icons.arrow_back),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => ForgotPasswordPage()));
+                     },
                       child: Text(
                         "Forgot Password?",
                         style: TextStyle(
@@ -180,7 +185,10 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Signup()));
+                      },
                       child: Text(
                         "Register",
                         style: TextStyle(
