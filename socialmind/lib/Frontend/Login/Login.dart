@@ -138,9 +138,11 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ForgotPasswordPage()));
-                     },
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ForgotPasswordPage()));
+                      },
                       child: Text(
                         "Forgot Password?",
                         style: TextStyle(
@@ -158,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: MaterialButton(
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => homepg()));
+                        MaterialPageRoute(builder: (context) => Homepg()));
                   },
                   height: 45,
                   minWidth: double.infinity,
@@ -187,7 +189,7 @@ class _LoginPageState extends State<LoginPage> {
                     TextButton(
                       onPressed: () {
                         Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Signup()));
+                            MaterialPageRoute(builder: (context) => Signup()));
                       },
                       child: Text(
                         "Register",

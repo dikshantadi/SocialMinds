@@ -19,8 +19,7 @@ class pg2 extends StatelessWidget {
             ),
           ),
           SizedBox(
-              height:
-                  20), // Adjust the space between the animation and the text
+              height: 20), // to adjust the space between the animation ra text
           const Text(
             'Share your feelings and posts \n When and where ever you are',
             style: TextStyle(
