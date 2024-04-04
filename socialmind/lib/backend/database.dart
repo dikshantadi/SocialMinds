@@ -12,4 +12,9 @@ class Database {
       'email': email,
     });
   }
+
+  Future getUserData(String uid) async {
+    DocumentSnapshot sp = await userCollection.doc(uid).get();
+    return sp;
+  }
 }

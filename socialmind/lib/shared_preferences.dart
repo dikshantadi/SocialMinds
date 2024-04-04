@@ -1,22 +1,27 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SP {
-  String? LogInStatus;
-  String? userName;
-  String? email;
+  static String LogInStatus = 'userLogInStatus';
+  static String userName = "userName";
+  static String email = "email";
 
-  Future setLogInStatus(bool isLoggedIn) async {
+  static Future<bool> setLogInStatus(isLoggedIn) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    sp.setBool(LogInStatus!, isLoggedIn);
+    return await sp.setBool(LogInStatus, isLoggedIn);
   }
 
-  Future setEmail(String email) async {
+  static Future<bool> setEmail(email) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    sp.setString(email, email);
+    return await sp.setString(email, email);
   }
 
-  Future setUserName(String userName) async {
+  static Future<bool> setUserName(userName) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
-    sp.setString(userName, userName);
+    return await sp.setString(userName, userName);
+  }
+
+  static Future getLoginStatus() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    return await sp.getBool(LogInStatus);
   }
 }
