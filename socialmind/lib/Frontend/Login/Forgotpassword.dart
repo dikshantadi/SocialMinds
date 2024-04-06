@@ -276,12 +276,15 @@ import 'package:animate_do/animate_do.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({Key? key}) : super(key: key);
 
   @override
   _ForgotPasswordPageState createState() => _ForgotPasswordPageState();
 }
+
+
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -362,22 +365,26 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   }
 
 
-  
-
 void _resetPassword() async {
   if (_formKey.currentState!.validate()) {
     setState(() {
       _isSendingResetEmail = true;
     });
     try {
-      // Send the reset password email
-      await _auth.sendPasswordResetEmail(email: _emailController.text);
-      _showResetEmailSentDialog();
+      // Attempt to create a user with the provided email
+      await _auth.createUserWithEmailAndPassword(
+        email: _emailController.text,
+        password: 'tempPassword', // Provide a temporary password
+      );
+      // If successful, the email is not registered
+      throw Exception('This email is not registered.');
     } catch (e) {
-      // Check the error message to determine if the email is unregistered
-      if (e is FirebaseAuthException && e.code == 'user-not-found') {
-        _showErrorDialog('This email is not registered.');
+      if (e is FirebaseAuthException && e.code == 'email-already-in-use') {
+        // If email is already registered, send the password reset email
+        await _auth.sendPasswordResetEmail(email: _emailController.text);
+        _showResetEmailSentDialog();
       } else {
+        // Handle other errors
         _showErrorDialog(e.toString());
       }
     } finally {
@@ -387,6 +394,31 @@ void _resetPassword() async {
     }
   }
 }
+
+
+// void _resetPassword() async {
+//   if (_formKey.currentState!.validate()) {
+//     setState(() {
+//       _isSendingResetEmail = true;
+//     });
+//     try {
+//       // Send the reset password email
+//       await _auth.sendPasswordResetEmail(email: _emailController.text);
+//       _showResetEmailSentDialog();
+//     } catch (e) {
+//       // Check the error message to determine if the email is unregistered
+//       if (e is FirebaseAuthException && e.code == 'user-not-found') {
+//         _showErrorDialog('This email is not registered.');
+//       } else {
+//         _showErrorDialog(e.toString());
+//       }
+//     } finally {
+//       setState(() {
+//         _isSendingResetEmail = false;
+//       });
+//     }
+//   }
+// }
 
 
 
@@ -431,12 +463,3 @@ void _resetPassword() async {
     );
   }
 }
-
-// class UserDatabase {
-//   final CollectionReference usersCollection = FirebaseFirestore.instance.collection('users');
-
-//   Future<bool> isEmailRegistered(String email) async {
-//     QuerySnapshot querySnapshot = await usersCollection.where('email', isEqualTo: email).get();
-//     return querySnapshot.docs.isNotEmpty;
-//   }
-// }
