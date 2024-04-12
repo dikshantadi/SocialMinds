@@ -9,7 +9,11 @@ class Homepg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    GlobalKey<ScaffoldState> _scaffoldKey =
+        GlobalKey(); //global scaffold define gareko ho nothing fancy
+    //drawer ma error dherai falera
     return Scaffold(
+      key: _scaffoldKey,
       bottomNavigationBar: Nav(),
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -24,11 +28,14 @@ class Homepg extends StatelessWidget {
         ),
         leading: IconButton(
           icon: Icon(
-            Iconsax.menu_1,
+            Icons.menu,
             size: 34,
             color: Colors.black,
           ),
-          onPressed: () {},
+          onPressed: () {
+            _scaffoldKey.currentState
+                ?.openDrawer(); //scaffold key le scaffold globally deko xa ra drawer open gareko simply
+          },
         ),
         actions: [
           IconButton(
@@ -48,6 +55,109 @@ class Homepg extends StatelessWidget {
             onPressed: () {},
           ),
         ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.deepPurpleAccent,
+              ),
+              child: Column(children: [
+                CircleAvatar(
+                  radius: 40,
+                  child: Icon(
+                    Iconsax.user,
+                    size: 40,
+                    color: Colors.deepPurpleAccent,
+                  ),
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                Text(
+                  '"user_name"',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                  ),
+                ),
+              ]),
+            ),
+            ListTile(
+              leading: Icon(Iconsax.home),
+              title: Text('Home'),
+              onTap: () {
+                // Implement navigation to home page here
+              },
+            ),
+            ListTile(
+              leading: Icon(Iconsax.user),
+              title: Text('My Profile'),
+              onTap: () {
+                // Implement navigation to settings page here
+              },
+            ),
+            ListTile(
+              leading: Icon(Iconsax.notification),
+              title: Text('Notifications'),
+              onTap: () {
+                // Implement navigation to settings page here
+              },
+            ),
+            ListTile(
+              leading: Icon(Iconsax.ghost),
+              title: Text('AI Chat-Bot'),
+              onTap: () {
+                // Implement navigation to settings page here
+              },
+            ),
+            ListTile(
+              leading: Icon(Iconsax.message),
+              title: Text('Chat'),
+              onTap: () {
+                // Implement navigation to settings page here
+              },
+            ),
+            ListTile(
+              leading: Icon(Iconsax.camera),
+              title: Text('Camera'),
+              onTap: () {
+                // Implement navigation to settings page here
+              },
+            ),
+            ListTile(
+              leading: Icon(Iconsax.graph),
+              title: Text('Stats'),
+              onTap: () {
+                // Implement navigation to settings page here
+              },
+            ),
+            Divider(),
+            ListTile(
+              leading: Icon(Iconsax.cpu_setting),
+              title: Text('Settings'),
+              onTap: () {
+                // Implement navigation to settings page here
+              },
+            ),
+            ListTile(
+              leading: Icon(Iconsax.import),
+              title: Text('Updates'),
+              onTap: () {
+                // Implement navigation to settings page here
+              },
+            ),
+            ListTile(
+              leading: Icon(Iconsax.logout),
+              title: Text('Logout'),
+              onTap: () {
+                // Implement navigation to settings page here
+              },
+            ),
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
