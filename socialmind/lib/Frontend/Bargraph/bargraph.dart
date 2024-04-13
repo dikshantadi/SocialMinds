@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:socialmind/Frontend/Bargraph/bardata.dart';
 
 class Bargraph extends StatelessWidget {
-  final List AverageAppUseTime;
+  final List
+      AverageAppUseTime; //array or list, backend bata yo change garnu parxa
   const Bargraph({super.key, required this.AverageAppUseTime});
   @override
   Widget build(BuildContext context) {
@@ -62,11 +63,13 @@ Widget getbottomtitle(double value, TitleMeta meta) {
   Widget text;
 
   if (value == 0) {
+    // yo xai array ko 0 lai sunday testo gardai gako
     text = const Text(
       'S',
       style: TextStyle(color: Colors.red),
     );
   } else if (value == 1) {
+    //1 lai monday ...
     text = const Text('M');
   } else if (value == 2) {
     text = const Text('T');
@@ -85,5 +88,6 @@ Widget getbottomtitle(double value, TitleMeta meta) {
     text = const SizedBox();
   }
 
-  return SideTitleWidget(child: text, axisSide: meta.axisSide);
+  return SideTitleWidget(
+      child: text, axisSide: meta.axisSide); //returning the widget
 }

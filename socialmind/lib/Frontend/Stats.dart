@@ -30,7 +30,7 @@ class _StatsState extends State<Stats> {
           leading: IconButton(
             icon: Icon(Iconsax.arrow_left),
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.of(context).pop(); //baira niskina
             },
           ),
           backgroundColor: Colors.transparent,
@@ -38,6 +38,7 @@ class _StatsState extends State<Stats> {
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
+                //gradient affect on app bar
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
@@ -69,7 +70,8 @@ class _StatsState extends State<Stats> {
                 padding: const EdgeInsets.all(16.0),
                 child: SizedBox(
                   child: Bargraph(
-                    AverageAppUseTime: AverageAppUseTime,
+                    AverageAppUseTime:
+                        AverageAppUseTime, //list or array for bargraph
                   ),
                   height: 300,
                 ),

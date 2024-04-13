@@ -178,7 +178,9 @@ class Homepg extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 50),
+            Container(
+              height: 50,
+            ),
             Container(
               height: 150,
               child: ListView(
@@ -210,6 +212,9 @@ class Homepg extends StatelessWidget {
             ),
             SizedBox(
               height: 50,
+            ),
+            Container(
+              height: 2,
             ),
             ListView.builder(
               shrinkWrap: true,

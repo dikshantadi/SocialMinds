@@ -1,5 +1,5 @@
 class Individualbar {
-  final double x;
+  final double x; //defining individual bars
   final double y;
 
   Individualbar({
