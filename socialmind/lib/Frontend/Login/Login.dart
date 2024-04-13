@@ -186,22 +186,37 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 SizedBox(height: 20),
                 FadeInUp(
-                  child: MaterialButton(
-                    // onPressed: () {
-                    //   Navigator.push(context,
-                    //       MaterialPageRoute(builder: (context) => Homepg()));
-                    // },
-                    onPressed: () {
-                      login();
-                    },
+                  child: Container(
+                    width: double.infinity,
                     height: 45,
-                    minWidth: double.infinity,
-                    color: Colors.black,
-                    textColor: Colors.white,
-                    shape: RoundedRectangleBorder(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.deepOrangeAccent,
+                          Colors.deepPurpleAccent,
+                        ],
+                        begin: Alignment.bottomLeft,
+                        end: Alignment.topRight,
+                      ),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Text("Login"),
+                    child: MaterialButton(
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Homepg()));
+                      },
+                      // onPressed: () {
+                      //   login();
+                      //},
+                      //  height: 45,
+                      // minWidth: double.infinity,
+                      // color: Colors.black,
+                      textColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text("Login"),
+                    ),
                   ),
                 ),
                 SizedBox(height: 20),

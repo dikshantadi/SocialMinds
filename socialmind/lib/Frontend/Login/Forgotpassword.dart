@@ -10,7 +10,6 @@ class ForgotPasswordPage extends StatefulWidget {
   _ForgotPasswordPageState createState() => _ForgotPasswordPageState();
 }
 
-
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
@@ -77,7 +76,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   ),
                   child: _isSendingResetEmail
                       ? CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
                         )
                       : Text("Send Reset Link"),
                 ),
@@ -88,48 +88,47 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       ),
     );
   }
-void _resetPassword() async {
-  if (_formKey.currentState!.validate()) {
-    setState(() {
-      _isSendingResetEmail = true;
-    });
-    try {
-      await _auth.sendPasswordResetEmail(email: _emailController.text);
-      // Inform the user to check their email if the account exists
-      _showGenericResetEmailSentDialog();
-    } catch (e) {
-      // Log error or handle it without exposing the nature of the error to the user
-      print(e); // Consider logging the error for your own debugging
-    } finally {
+
+  void _resetPassword() async {
+    if (_formKey.currentState!.validate()) {
       setState(() {
-        _isSendingResetEmail = false;
+        _isSendingResetEmail = true;
       });
+      try {
+        await _auth.sendPasswordResetEmail(email: _emailController.text);
+        // Inform the user to check their email if the account exists
+        _showGenericResetEmailSentDialog();
+      } catch (e) {
+        // Log error or handle it without exposing the nature of the error to the user
+        print(e); // Consider logging the error for your own debugging
+      } finally {
+        setState(() {
+          _isSendingResetEmail = false;
+        });
+      }
     }
   }
-}
 
-void _showGenericResetEmailSentDialog() {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Check Your Email'),
-        content: Text(
-          'If an account exists for the email provided, you will receive an email with instructions on how to reset your password.'
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text('OK'),
-          ),
-        ],
-      );
-    },
-  );
-}
-
+  void _showGenericResetEmailSentDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Check Your Email'),
+          content: Text(
+              'If an account exists for the email provided, you will receive an email with instructions on how to reset your password.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
 // void _resetPassword() async {
 //   if (_formKey.currentState!.validate()) {

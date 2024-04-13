@@ -232,19 +232,34 @@ class _SignupState extends State<Signup> {
                   height: 30,
                 ),
                 FadeInUp(
-                  child: MaterialButton(
-                    onPressed: () {
-                      register();
-                    },
+                  child: Container(
+                    width: double.infinity,
                     height: 45,
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    color: Colors.black,
-                    child: Text(
-                      'SignUp',
-                      style: TextStyle(
-                        color: Colors.white,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.purple,
+                          Colors.deepOrangeAccent,
+                        ],
+                        begin: Alignment.bottomLeft,
+                        end: Alignment.topRight,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: MaterialButton(
+                      onPressed: () {
+                        register();
+                      },
+                      //height: 45,
+                      //padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+                      //shape: RoundedRectangleBorder(
+                      //  borderRadius: BorderRadius.circular(10)),
+                      // color: Colors.black,
+                      child: Text(
+                        'SignUp',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),

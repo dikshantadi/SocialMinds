@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:socialmind/Frontend/Stats.dart';
 import 'nav.dart';
 import 'background.dart';
 import 'package:iconsax/iconsax.dart';
@@ -62,6 +63,13 @@ class Homepg extends StatelessWidget {
           children: <Widget>[
             DrawerHeader(
               decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.bottomRight,
+                    end: Alignment.topLeft,
+                    colors: [
+                      Colors.deepPurpleAccent,
+                      Colors.deepOrangeAccent,
+                    ]),
                 color: Colors.deepPurpleAccent,
               ),
               child: Column(children: [
@@ -129,12 +137,20 @@ class Homepg extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Iconsax.graph),
-              title: Text('Stats'),
+              title: Text('My Statistics'),
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Stats()));
+              },
+            ),
+            Divider(),
+            ListTile(
+              leading: Icon(Iconsax.password_check),
+              title: Text('Change password'),
               onTap: () {
                 // Implement navigation to settings page here
               },
             ),
-            Divider(),
             ListTile(
               leading: Icon(Iconsax.cpu_setting),
               title: Text('Settings'),
