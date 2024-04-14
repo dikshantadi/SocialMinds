@@ -25,26 +25,33 @@ class _StatsState extends State<Stats> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.grey[300],
-        appBar: AppBar(
-          title: Text('User Statistics'),
-          leading: IconButton(
-            icon: Icon(Iconsax.arrow_left),
-            onPressed: () {
-              Navigator.of(context).pop(); //baira niskina
-            },
-          ),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                //gradient affect on app bar
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Colors.purple,
-                  Colors.deepPurpleAccent,
-                ],
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(100),
+          child: AppBar(
+            title: Text('User Statistics'),
+            leading: IconButton(
+              icon: Icon(Iconsax.arrow_left),
+              onPressed: () {
+                Navigator.of(context).pop(); //baira niskina
+              },
+            ),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  //gradient affect on app bar
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Colors.deepOrangeAccent,
+                    // Colors.deepPurpleAccent,
+                    Colors.pink,
+                  ],
+                ),
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(20), // Adjust the curve as needed
+                ),
               ),
             ),
           ),

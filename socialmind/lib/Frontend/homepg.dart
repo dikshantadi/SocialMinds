@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:socialmind/Frontend/Chat/Chatpage.dart';
 import 'package:socialmind/Frontend/Stats.dart';
 import 'nav.dart';
 import 'background.dart';
@@ -16,46 +17,65 @@ class Homepg extends StatelessWidget {
     return Scaffold(
       key: _scaffoldKey,
       bottomNavigationBar: Nav(),
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        title: Text(
-          'SocialMind',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60),
+        child: AppBar(
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                //gradient affect on app bar
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.white,
+                  Colors.white,
+                ],
+              ),
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(20), // Adjust the curve as needed
+              ),
+            ),
           ),
-        ),
-        leading: IconButton(
-          icon: Icon(
-            Icons.menu,
-            size: 34,
-            color: Colors.black,
+          title: Text(
+            'SocialMind',
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+            ),
           ),
-          onPressed: () {
-            _scaffoldKey.currentState
-                ?.openDrawer(); //scaffold key le scaffold globally deko xa ra drawer open gareko simply
-          },
-        ),
-        actions: [
-          IconButton(
+          leading: IconButton(
             icon: Icon(
-              Iconsax.notification,
-              size: 30,
+              Icons.menu,
+              size: 34,
               color: Colors.black,
             ),
-            onPressed: () {},
+            onPressed: () {
+              _scaffoldKey.currentState
+                  ?.openDrawer(); //scaffold key le scaffold globally deko xa ra drawer open gareko simply
+            },
           ),
-          IconButton(
-            icon: Icon(
-              Iconsax.search_normal,
-              size: 30,
-              color: Colors.black,
+          actions: [
+            IconButton(
+              icon: Icon(
+                Iconsax.notification,
+                size: 30,
+                color: Colors.black,
+              ),
+              onPressed: () {},
             ),
-            onPressed: () {},
-          ),
-        ],
+            IconButton(
+              icon: Icon(
+                Iconsax.search_normal,
+                size: 30,
+                color: Colors.black,
+              ),
+              onPressed: () {},
+            ),
+          ],
+        ),
       ),
       drawer: Drawer(
         child: ListView(
@@ -125,7 +145,8 @@ class Homepg extends StatelessWidget {
               leading: Icon(Iconsax.message),
               title: Text('Chat'),
               onTap: () {
-                // Implement navigation to settings page here
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Chat()));
               },
             ),
             ListTile(
