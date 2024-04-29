@@ -18,7 +18,9 @@ class _NavState extends State<Nav> {
   final List<Widget> _pages = [
     Homepg(),
     Chat(),
-    Camera(),
+    /* Camerapg(
+      camera: firstcamera, cameras: [],
+    ),*/
     Userpg(),
   ];
   @override

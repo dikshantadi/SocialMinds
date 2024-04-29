@@ -1,19 +1,17 @@
-import 'package:flutter/cupertino.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:socialmind/Frontend/nav.dart';
+import 'package:socialmind/Frontend/Camera/Displaypicturescreen.dart';
 
-class Camera extends StatefulWidget {
-  const Camera({super.key});
+class camerapg extends StatefulWidget {
+  const camerapg({super.key});
 
   @override
-  State<Camera> createState() => _CameraState();
+  State<camerapg> createState() => _camerapgState();
 }
 
-class _CameraState extends State<Camera> {
+class _camerapgState extends State<camerapg> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: Nav(),
-    );
+    return Scaffold();
   }
 }

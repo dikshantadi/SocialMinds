@@ -1,5 +1,7 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:socialmind/Frontend/Camera/Camerapage.dart';
 import 'package:socialmind/Frontend/Chat/Chatpage.dart';
 import 'package:socialmind/Frontend/Stats.dart';
 import 'nav.dart';
@@ -7,7 +9,7 @@ import 'background.dart';
 import 'package:iconsax/iconsax.dart';
 
 class Homepg extends StatelessWidget {
-  const Homepg({Key? key}) : super(key: key);
+  const Homepg({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +155,8 @@ class Homepg extends StatelessWidget {
               leading: Icon(Iconsax.camera),
               title: Text('Camera'),
               onTap: () {
-                // Implement navigation to settings page here
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => camerapg()));
               },
             ),
             ListTile(
