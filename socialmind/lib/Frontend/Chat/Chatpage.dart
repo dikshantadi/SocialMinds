@@ -3,8 +3,6 @@ import 'package:iconsax/iconsax.dart';
 import 'package:socialmind/Frontend/nav.dart';
 
 class Chat extends StatelessWidget {
-  const Chat({Key? key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,7 +12,6 @@ class Chat extends StatelessWidget {
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                //gradient affect app bar lai
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
@@ -23,7 +20,7 @@ class Chat extends StatelessWidget {
                 ],
               ),
               borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(20), // curve appbar ko
+                bottom: Radius.circular(20),
               ),
             ),
           ),
@@ -54,9 +51,33 @@ class Chat extends StatelessWidget {
               ),
             ),
           ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: 6,
+              itemBuilder: (context, index) {
+                return Card(
+                  elevation: 3,
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      child: Icon(Iconsax.personalcard),
+                    ),
+                    title: Text("Demo user"),
+                    subtitle: Text(
+                      "Last message",
+                      maxLines: 1,
+                    ),
+                    trailing: Text(
+                      "12:00 pm",
+                      style: TextStyle(color: Colors.black12),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
         ],
       ),
-      bottomNavigationBar: Nav(), //nav bar taneko
+      bottomNavigationBar: Nav(),
     );
   }
 }
