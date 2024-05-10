@@ -156,7 +156,7 @@ class Homepg extends StatelessWidget {
               title: Text('Camera'),
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => camerapg()));
+                    MaterialPageRoute(builder: (context) => CameraPage()));
               },
             ),
             ListTile(
