@@ -24,4 +24,9 @@ class SP {
     SharedPreferences sp = await SharedPreferences.getInstance();
     return await sp.getBool(LogInStatus);
   }
+
+  static Future deleteloginStatus() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    return await sp.clear();
+  }
 }

@@ -33,7 +33,7 @@ class Authentication {
     }
   }
 
-  Future changePassword(String email, oldPassword, newPassword) async {
+  Future changePassword(oldPassword, newPassword) async {
     try {
       final credential = EmailAuthProvider.credential(
           email: firebaseAuth.currentUser!.email!, password: oldPassword);

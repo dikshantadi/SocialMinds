@@ -1,25 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:socialmind/Frontend/Login/Login.dart';
-
-class Authentication {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-
-  Future<void> changePassword(String oldPassword, String newPassword) async {
-    try {
-      final user = _firebaseAuth.currentUser;
-      final credential = EmailAuthProvider.credential(
-        email: user!.email!,
-        password: oldPassword,
-      );
-      await user.reauthenticateWithCredential(credential);
-      await user.updatePassword(newPassword);
-    } catch (error) {
-      throw error;
-    }
-  }
-}
+import '../../backend/authentication.dart';
 
 class ChangePasswordPage extends StatefulWidget {
   const ChangePasswordPage({Key? key}) : super(key: key);
@@ -177,7 +159,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       Colors.white,
                     ),
                     overlayColor: MaterialStateProperty.all<Color>(
-                      Colors.deepPurpleAccent.withOpacity(0.5), // Added overlay color
+                      Colors.deepPurpleAccent
+                          .withOpacity(0.5), // Added overlay color
                     ),
                   ),
                 ),
@@ -190,23 +173,24 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   }
 
   void changePassword() async {
-  if (formKey.currentState!.validate()) {
-    try {
-      await auth.changePassword(oldPassword!, newPassword!);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Password changed successfully")),
-      );
-      // Redirect to login page
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => LoginPage()), // Assuming LoginPage is the name of your login page
-      );
-    } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Failed to change password: $error")),
-      );
+    if (formKey.currentState!.validate()) {
+      try {
+        await auth.changePassword(oldPassword!, newPassword!);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Password changed successfully")),
+        );
+        // Redirect to login page
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  LoginPage()), // Assuming LoginPage is the name of your login page
+        );
+      } catch (error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Failed to change password: $error")),
+        );
+      }
     }
   }
-}
-
 }

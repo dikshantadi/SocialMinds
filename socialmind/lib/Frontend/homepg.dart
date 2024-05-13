@@ -5,7 +5,8 @@ import 'package:socialmind/Frontend/Camera/Camerapage.dart';
 import 'package:socialmind/Frontend/Chat/Chatpage.dart';
 import 'package:socialmind/Frontend/Login/Changepassword.dart';
 import 'package:socialmind/Frontend/Login/Login.dart';
-
+import '../backend/authentication.dart';
+import '../shared_preferences.dart';
 import 'package:socialmind/Frontend/Stats.dart';
 import 'nav.dart';
 import 'background.dart';
@@ -16,49 +17,52 @@ class Homepg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Authentication auth = Authentication();
     GlobalKey<ScaffoldState> _scaffoldKey =
         GlobalKey(); //global scaffold define gareko ho nothing fancy
     //drawer ma error dherai falera
     Future<void> _logout(BuildContext context) async {
-  
-  Navigator.push(
-    context, MaterialPageRoute(builder: (context) => LoginPage()));
-}
+      await auth.logout().then((value) async {
+        await SP.setLogInStatus(false);
+        await SP.deleteloginStatus();
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => LoginPage()));
+      });
+    }
 
-Future<void> _showLogoutConfirmationDialog(BuildContext context) async {
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: false, // user must tap button!
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Logout'),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              Text('Are you sure you want to logout?'),
+    Future<void> _showLogoutConfirmationDialog(BuildContext context) async {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Logout'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text('Are you sure you want to logout?'),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Later'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text('Yes'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _logout(context); // Pass the context to _logout
+                },
+              ),
             ],
-          ),
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: Text('Later'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          TextButton(
-            child: Text('Yes'),
-            onPressed: () {
-              Navigator.of(context).pop();
-              _logout(context); // Pass the context to _logout
-            },
-          ),
-        ],
+          );
+        },
       );
-    },
-  );
-}
-
+    }
 
     return Scaffold(
       key: _scaffoldKey,
@@ -218,7 +222,9 @@ Future<void> _showLogoutConfirmationDialog(BuildContext context) async {
               onTap: () {
                 // Implement navigation to settings page here
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => ChangePasswordPage()));
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ChangePasswordPage()));
               },
             ),
             ListTile(
@@ -240,9 +246,8 @@ Future<void> _showLogoutConfirmationDialog(BuildContext context) async {
               title: Text('Logout'),
               onTap: () {
                 // Implement navigation to settings page here
-                
-                _showLogoutConfirmationDialog(context); // Pass the context
 
+                _showLogoutConfirmationDialog(context); // Pass the context
               },
             ),
           ],
