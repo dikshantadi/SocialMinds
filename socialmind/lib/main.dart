@@ -3,8 +3,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:socialmind/Frontend/Login/Signup.dart';
+import 'package:socialmind/Frontend/Login/verifyEmail.dart';
 import 'package:socialmind/Frontend/StartPage.dart';
 import 'package:socialmind/Frontend/homepg.dart';
+import 'Frontend/Login/verifyEmail.dart';
 import 'package:socialmind/firebase_options.dart';
 import 'package:socialmind/shared_preferences.dart';
 

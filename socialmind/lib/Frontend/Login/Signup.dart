@@ -1,14 +1,18 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
 import 'package:socialmind/Frontend/Login/Login.dart';
+import 'package:socialmind/Frontend/Login/verifyEmail.dart';
 import 'package:socialmind/Widgets/Custom_scaffold.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:iconsax/iconsax.dart';
 import '../../backend//authentication.dart';
+import '../../shared_preferences.dart';
+import '../../backend/database.dart';
 
 class Signup extends StatefulWidget {
   const Signup({Key? key}) : super(key: key);
@@ -281,13 +285,44 @@ class _SignupState extends State<Signup> {
     );
   }
 
-  void register() async {
+  register() async {
     if (formKey.currentState!.validate()) {
-      await auth.registerWithEmail(userName!, email!, password!).then((value) {
-        print(value);
+      await auth
+          .registerWithEmail(userName!, email!, password!)
+          .then((value) async {
+        if (value == null) {
+          final uid = await auth.firebaseAuth.currentUser!.uid;
+          await SP.setLogInStatus(true);
+          await SP.setEmail(email!);
+          await Database(uid: auth.firebaseAuth.currentUser!.uid)
+              .getUserData(uid)
+              .then(
+            (value) async {
+              if (value != null) {
+                DocumentSnapshot snapshot = value;
+                await SP.setUserName(snapshot['userName']);
+              }
+            },
+          );
+
+          print(uid);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      verifyEmail(email: email!, password: password!)));
+        } else {
+          return SnackBar(
+            content: Text(value),
+            backgroundColor: Colors.red,
+          );
+        }
       });
     } else {
-      print('invalid');
+      return SnackBar(
+        content: Text('Invalid Inputs'),
+        backgroundColor: Colors.red,
+      );
     }
   }
 }
