@@ -267,7 +267,7 @@ class _LoginPageState extends State<LoginPage> {
           await SP.setLogInStatus(true);
           await SP.setEmail(email!);
           await Database(uid: auth.firebaseAuth.currentUser!.uid)
-              .getUserData(uid)
+              .getUserData()
               .then(
             (value) async {
               if (value != null) {

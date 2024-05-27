@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:lottie/lottie.dart';
 import 'package:socialmind/Frontend/Login/Login.dart';
 import 'package:socialmind/Frontend/Login/verifyEmail.dart';
+import 'package:socialmind/Frontend/homepg.dart';
 import 'package:socialmind/Widgets/Custom_scaffold.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:iconsax/iconsax.dart';
@@ -295,7 +296,7 @@ class _SignupState extends State<Signup> {
           await SP.setLogInStatus(true);
           await SP.setEmail(email!);
           await Database(uid: auth.firebaseAuth.currentUser!.uid)
-              .getUserData(uid)
+              .getUserData()
               .then(
             (value) async {
               if (value != null) {
@@ -306,23 +307,25 @@ class _SignupState extends State<Signup> {
           );
 
           print(uid);
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //         builder: (context) =>
+          //             verifyEmail(email: email!, password: password!)));\
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      verifyEmail(email: email!, password: password!)));
+              context, MaterialPageRoute(builder: (context) => Homepg()));
         } else {
-          return SnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(value),
             backgroundColor: Colors.red,
-          );
+          ));
         }
       });
     } else {
-      return SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Invalid Inputs'),
         backgroundColor: Colors.red,
-      );
+      ));
     }
   }
 }
