@@ -26,9 +26,10 @@ class _StatsState extends State<Stats> {
     return Scaffold(
         backgroundColor: Colors.grey[300],
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(100),
+          preferredSize: Size.fromHeight(75),
           child: AppBar(
             title: Text('User Statistics'),
+            titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
             leading: IconButton(
               icon: Icon(Iconsax.arrow_left),
               onPressed: () {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:socialmind/Frontend/Login/Login.dart';
 import '../../backend/authentication.dart';
 
@@ -24,6 +25,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Change Password"),
+        titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -62,7 +64,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   decoration: InputDecoration(
                     labelText: "Old Password",
                     hintText: "Old Password",
-                    prefixIcon: Icon(Icons.lock),
+                    prefixIcon: Icon(Iconsax.key1),
                     suffixIcon: InkWell(
                       onTap: () {
                         setState(() {
@@ -95,7 +97,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   decoration: InputDecoration(
                     labelText: "New Password",
                     hintText: "New Password",
-                    prefixIcon: Icon(Icons.lock),
+                    prefixIcon: Icon(Iconsax.key),
                     suffixIcon: InkWell(
                       onTap: () {
                         setState(() {
@@ -130,7 +132,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   decoration: InputDecoration(
                     labelText: "Confirm Password",
                     hintText: "Confirm Password",
-                    prefixIcon: Icon(Icons.lock),
+                    prefixIcon: Icon(Iconsax.lock),
                     suffixIcon: InkWell(
                       onTap: () {
                         setState(() {
@@ -138,9 +140,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                         });
                       },
                       child: Icon(
-                        _passwordVisible
-                            ? Icons.visibility
-                            : Icons.visibility_off,
+                        _passwordVisible ? Iconsax.eye : Icons.visibility_off,
                       ),
                     ),
                   ),

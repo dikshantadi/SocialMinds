@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:socialmind/Frontend/Camera/Camerapage.dart';
+import 'package:socialmind/Frontend/Chat/Chatbot/Chatbot.dart';
 import 'package:socialmind/Frontend/Chat/Chatpage.dart';
 import 'package:socialmind/Frontend/Login/Changepassword.dart';
 import 'package:socialmind/Frontend/Login/Login.dart';
@@ -188,7 +189,8 @@ class Homepg extends StatelessWidget {
               leading: Icon(Iconsax.ghost),
               title: Text('AI Chat-Bot'),
               onTap: () {
-                // Implement navigation to settings page here
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Chatbotpg()));
               },
             ),
             ListTile(
