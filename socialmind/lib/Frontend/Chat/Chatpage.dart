@@ -7,7 +7,7 @@ class Chat extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100),
+        preferredSize: Size.fromHeight(70),
         child: AppBar(
           flexibleSpace: Container(
             decoration: BoxDecoration(

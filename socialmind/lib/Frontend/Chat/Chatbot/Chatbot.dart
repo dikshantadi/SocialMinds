@@ -16,10 +16,10 @@ class _ChatbotpgState extends State<Chatbotpg> {
 
   Future<void> _sendMessage(String message) async {
     setState(() {
-      _messages.add({"sender": "user", "text": message});
+      _messages.add({"sender": "User", "text": message});
     });
     final response = await http.post(
-      Uri.parse('http://192.168.1.100:5000/chatbot'),
+      Uri.parse('http://192.168.1.102:5000/chatbot'),
       headers: {"Content-Type": "application/json"},
       body: json.encode({"message": message}),
     );
@@ -27,7 +27,7 @@ class _ChatbotpgState extends State<Chatbotpg> {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       setState(() {
-        _messages.add({"sender": "bot", "text": data["response"]});
+        _messages.add({"sender": "Chat Bot", "text": data["response"]});
       });
     } else {
       print('Error: ${response.statusCode}');
@@ -51,7 +51,7 @@ class _ChatbotpgState extends State<Chatbotpg> {
                 ],
               ),
               borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(20), // Adjust the curve as needed
+                bottom: Radius.circular(20),
               ),
             ),
           ),
@@ -71,7 +71,7 @@ class _ChatbotpgState extends State<Chatbotpg> {
                 return ListTile(
                   title: Text(message["text"]!),
                   subtitle: Text(message["sender"]!),
-                  tileColor: message["sender"] == "user"
+                  tileColor: message["sender"] == "User"
                       ? Colors.blue[50]
                       : Colors.green[50],
                 );
@@ -80,25 +80,29 @@ class _ChatbotpgState extends State<Chatbotpg> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    decoration: InputDecoration(
-                      hintText: 'Enter your message',
+            child: Container(
+              padding: EdgeInsets.only(bottom: 8.0),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: TextField(
+                      controller: _controller,
+                      decoration: InputDecoration(
+                        hintText: 'Enter your message',
+                      ),
+                      textAlign: TextAlign.left,
                     ),
                   ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: () {
-                    final message = _controller.text;
-                    _controller.clear();
-                    _sendMessage(message);
-                  },
-                ),
-              ],
+                  IconButton(
+                    icon: Icon(Iconsax.arrow_right_3),
+                    onPressed: () {
+                      final message = _controller.text;
+                      _controller.clear();
+                      _sendMessage(message);
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ],

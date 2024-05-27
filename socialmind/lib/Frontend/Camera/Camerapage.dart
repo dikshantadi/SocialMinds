@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:camera/camera.dart';
@@ -141,7 +140,8 @@ class _CameraPageState extends State<CameraPage> {
               onPressed: () {
                 // Perform sharing logic here
                 // You can upload the image to Firebase Storage and save the description to Firestore or any other action
-                Navigator.of(context).popUntil((route) => route.isFirst); // Close all dialogs
+                Navigator.of(context)
+                    .popUntil((route) => route.isFirst); // Close all dialogs
               },
               child: Text('Share'),
             ),
@@ -155,7 +155,7 @@ class _CameraPageState extends State<CameraPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100),
+        preferredSize: Size.fromHeight(70),
         child: AppBar(
           flexibleSpace: Container(
             decoration: BoxDecoration(
