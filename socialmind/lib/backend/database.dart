@@ -6,11 +6,15 @@ class Database {
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection("Users");
 
-  Future createUserDocument(String userName, email) async {
-    await userCollection.doc(uid).set({
-      'userName': userName,
-      'email': email,
-    });
+  Future<void> createUserDocument(String userName, email) async {
+    try {
+      Map<String, dynamic> userData = {'userName': userName, 'email': email};
+      print(userData);
+
+      await userCollection.doc(uid).set(userData);
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future deleteUser(String email) async {
@@ -25,7 +29,7 @@ class Database {
     }
   }
 
-  Future getUserData(String uid) async {
+  Future getUserData() async {
     DocumentSnapshot sp = await userCollection.doc(uid).get();
     return sp;
   }

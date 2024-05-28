@@ -1,4 +1,6 @@
 import 'package:camera/camera.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:socialmind/Frontend/Camera/Camerapage.dart';
@@ -12,9 +14,38 @@ import 'package:socialmind/Frontend/Stats.dart';
 import 'nav.dart';
 import 'background.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:socialmind/backend/database.dart';
+import 'package:socialmind/backend/authentication.dart';
 
-class Homepg extends StatelessWidget {
-  const Homepg({super.key});
+class Homepg extends StatefulWidget {
+  const Homepg({
+    super.key,
+  });
+
+  @override
+  State<Homepg> createState() => _HomepgState();
+}
+
+class _HomepgState extends State<Homepg> {
+  @override
+  String? userName;
+  Authentication auth = Authentication();
+  void initState() {
+    getUserData();
+    super.initState();
+  }
+
+  getUserData() async {
+    await Database(uid: auth.firebaseAuth.currentUser!.uid)
+        .getUserData()
+        .then((value) {
+      DocumentSnapshot snapshot = value;
+      setState(() {
+        userName = snapshot['userName'];
+      });
+      print(userName);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +186,7 @@ class Homepg extends StatelessWidget {
                   height: 12,
                 ),
                 Text(
-                  '"user_name"',
+                  userName != null ? userName! : "UserName",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
