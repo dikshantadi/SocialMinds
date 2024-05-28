@@ -14,12 +14,12 @@ nltk.download('wordnet')
 
 lemmatizer = WordNetLemmatizer()
 
-intents = json.loads(open(r'C:\Users\adhik\Desktop\Chatrobot\intent.json').read()) #aafno rakhne hai yo, keep your own path
+intents = json.loads(open(r'socialmind/Chatbot code/intent.json').read()) #aafno rakhne hai yo, keep your own path
 
 
-words = pickle.load(open('words.pkl', 'rb'))
-classes = pickle.load(open('classes.pkl', 'rb'))
-model = load_model('chatbot_model.h5')
+words = pickle.load(open('socialmind/Chatbot code/words.pkl', 'rb'))
+classes = pickle.load(open('socialmind/Chatbot code/classes.pkl', 'rb'))
+model = load_model('socialmind/Chatbot code/chatbot_model.h5')
 
 def clean_up_sentence(sentence):
     sentence_words = nltk.word_tokenize(sentence)

@@ -11,7 +11,7 @@ nltk.download('wordnet')
 
 lemmatizer = WordNetLemmatizer()
 
-with open('intent.json') as f:
+with open('socialmind/Chatbot code/intent.json') as f:
     intents = json.load(f)
 
 words = []
