@@ -76,7 +76,6 @@ class Homepg extends StatelessWidget {
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                //gradient affect on app bar
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
