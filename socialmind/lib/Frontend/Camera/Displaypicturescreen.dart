@@ -23,7 +23,8 @@ import 'package:flutter/material.dart';
 class DisplayScreenPicture extends StatelessWidget {
   final File imageFile;
 
-  const DisplayScreenPicture({Key? key, required this.imageFile}) : super(key: key);
+  const DisplayScreenPicture({Key? key, required this.imageFile})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

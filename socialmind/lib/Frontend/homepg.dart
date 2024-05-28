@@ -43,7 +43,6 @@ class _HomepgState extends State<Homepg> {
       setState(() {
         userName = snapshot['userName'];
       });
-      print(userName);
     });
   }
 

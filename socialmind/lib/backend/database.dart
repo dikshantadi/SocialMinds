@@ -8,7 +8,12 @@ class Database {
 
   Future<void> createUserDocument(String userName, email) async {
     try {
-      Map<String, dynamic> userData = {'userName': userName, 'email': email};
+      Map<String, dynamic> userData = {
+        'userName': userName,
+        'email': email,
+        'profilePicture': '',
+        'friendList': []
+      };
       print(userData);
 
       await userCollection.doc(uid).set(userData);
@@ -32,5 +37,10 @@ class Database {
   Future getUserData() async {
     DocumentSnapshot sp = await userCollection.doc(uid).get();
     return sp;
+  }
+
+  Future uploadPostByUser(Map<String, dynamic> postData) async {
+    await Database().userCollection.doc(uid).collection('posts').add(postData);
+    return null;
   }
 }

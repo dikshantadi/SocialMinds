@@ -201,12 +201,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     child: MaterialButton(
                       onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Homepg()));
+                        login();
                       },
-                      // onPressed: () {
-                      //   login();
-                      // },
                       height: 45,
                       minWidth: double.infinity,
                       color: Colors.black,

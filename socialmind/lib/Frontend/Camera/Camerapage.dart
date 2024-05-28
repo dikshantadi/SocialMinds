@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:camera/camera.dart';
 import 'dart:io';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:socialmind/backend/database.dart';
+import 'package:socialmind/backend/storage.dart';
 
 class CameraPage extends StatefulWidget {
   @override
@@ -14,6 +17,7 @@ class _CameraPageState extends State<CameraPage> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   String? _imageURL;
+  XFile? img;
   TextEditingController _descriptionController = TextEditingController();
 
   @override
@@ -27,7 +31,7 @@ class _CameraPageState extends State<CameraPage> {
   Future<void> _initializeCamera() async {
     // Initialize camera
     cameras = await availableCameras();
-    _controller = CameraController(cameras[0], ResolutionPreset.medium);
+    _controller = CameraController(cameras[0], ResolutionPreset.low);
     await _controller.initialize();
   }
 
@@ -39,7 +43,8 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   Future<void> _openGallery() async {
-    final imageFile = await ImagePicker().getImage(source: ImageSource.gallery);
+    final imageFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     if (imageFile != null) {
       setState(() {
         _imageURL = imageFile.path;
@@ -52,10 +57,10 @@ class _CameraPageState extends State<CameraPage> {
     try {
       await _initializeControllerFuture;
 
-      final image = await _controller.takePicture();
+      final image = await ImagePicker().pickImage(source: ImageSource.camera);
 
       setState(() {
-        _imageURL = image.path;
+        _imageURL = image!.path;
         _showOptionsDialog();
       });
     } catch (e) {
@@ -140,6 +145,8 @@ class _CameraPageState extends State<CameraPage> {
               onPressed: () {
                 // Perform sharing logic here
                 // You can upload the image to Firebase Storage and save the description to Firestore or any other action
+                uploadPost();
+
                 Navigator.of(context)
                     .popUntil((route) => route.isFirst); // Close all dialogs
               },
@@ -213,5 +220,22 @@ class _CameraPageState extends State<CameraPage> {
         ],
       ),
     );
+  }
+
+  uploadPost() async {
+    if (_imageURL != null) {
+      Map<String, dynamic> postData = {};
+      await Storage().uploadImage(File(_imageURL!)).then((value) {
+        if (value != 'error') {
+          String downloadUrl = value;
+          postData = {
+            'caption': _descriptionController.text,
+            'imageUrl': downloadUrl
+          };
+        }
+      });
+      await Database(uid: FirebaseAuth.instance.currentUser!.uid)
+          .uploadPostByUser(postData);
+    }
   }
 }
