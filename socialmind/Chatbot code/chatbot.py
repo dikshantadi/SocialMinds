@@ -14,7 +14,7 @@ nltk.download('wordnet')
 
 lemmatizer = WordNetLemmatizer()
 
-intents = json.loads(open(r'socialmind/Chatbot code/intent.json').read()) #aafno rakhne hai yo, keep your own path
+intents = json.loads(open(r'socialmind/Chatbot code/intent.json').read()) #Dont change this, arko train garyo bhane change garnu parxa.
 
 
 words = pickle.load(open('socialmind/Chatbot code/words.pkl', 'rb'))
