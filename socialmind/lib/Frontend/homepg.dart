@@ -107,7 +107,6 @@ class _HomepgState extends State<Homepg> {
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                //gradient affect on app bar
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [

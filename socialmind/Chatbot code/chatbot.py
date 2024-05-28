@@ -1,3 +1,4 @@
+from flask import Flask, request, jsonify
 import random
 import json
 import pickle
@@ -6,23 +7,19 @@ import nltk
 from nltk.stem import WordNetLemmatizer
 from keras.models import load_model
 
-
+app = Flask(__name__)
 
 nltk.download('punkt')
 nltk.download('wordnet')
 
-
 lemmatizer = WordNetLemmatizer()
 
-
-intents = json.loads(open(r'socialmind\lib\backend\Chatbot\intent.json').read()) #aafno rakhne hai yo, keep your own path
-
+intents = json.loads(open(r'socialmind/Chatbot code/intent.json').read()) #aafno rakhne hai yo, keep your own path
 
 
-
-words = pickle.load(open('words.pkl', 'rb'))
-classes = pickle.load(open('classes.pkl', 'rb'))
-model = load_model('chatbot_model.h5')
+words = pickle.load(open('socialmind/Chatbot code/words.pkl', 'rb'))
+classes = pickle.load(open('socialmind/Chatbot code/classes.pkl', 'rb'))
+model = load_model('socialmind/Chatbot code/chatbot_model.h5')
 
 def clean_up_sentence(sentence):
     sentence_words = nltk.word_tokenize(sentence)
@@ -62,11 +59,24 @@ def get_response(intents_list, intents_json):
         return "Sorry, I didn't understand that."
 
 print("GO! Bot is running!")
-
-while True:
-    message = input("")
-    if message.lower() == "quit":
-        break
+@app.route('/chatbot', methods=['POST'])
+def chatbot_response():
+    data = request.get_json()
+    print("Received message:", data)  # Debugging print
+    message = data['message']
     ints = predict_class(message)
+    print("Predicted intents:", ints)  # Debugging print
     res = get_response(ints, intents)
-    print(res)
+    print("Response:", res)  # Debugging print
+    return jsonify({"response": res})
+
+if __name__ == "__main__":
+    app.run(host="192.168.1.102", port=5000, debug=True)
+
+#while True:
+ #   message = input("")
+ #   if message.lower() == "quit":
+  #      break
+  #  ints = predict_class(message)S
+  #  res = get_response(ints, intents)
+  #  print(res)

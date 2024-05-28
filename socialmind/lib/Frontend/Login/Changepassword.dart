@@ -23,11 +23,13 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Change Password"),
-        titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(70),
+        child: AppBar(
+          title: Text("Change Password"),
+          titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
+          flexibleSpace: Container(
+              decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -36,7 +38,10 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 Colors.deepPurpleAccent,
               ],
             ),
-          ),
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(20),
+            ),
+          )),
         ),
       ),
       body: Form(
