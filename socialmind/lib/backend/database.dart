@@ -48,4 +48,16 @@ class Database {
       'postList': FieldValue.arrayUnion(["${document.id}"])
     });
   }
+
+  Future getPosts() async {
+    try {
+      DocumentSnapshot doc = await userCollection.doc(uid).get();
+      List friendList = doc['friendList'];
+      QuerySnapshot snapshot =
+          await postCollection.where('postedBy', whereIn: friendList).get();
+      return snapshot;
+    } catch (e) {
+      print(e);
+    }
+  }
 }

@@ -6,6 +6,7 @@ import 'package:socialmind/Frontend/Login/Signup.dart';
 import 'package:socialmind/Frontend/Login/verifyEmail.dart';
 import 'package:socialmind/Frontend/StartPage.dart';
 import 'package:socialmind/Frontend/homepg.dart';
+import 'package:socialmind/Frontend/test.dart';
 import 'Frontend/Login/verifyEmail.dart';
 import 'package:socialmind/firebase_options.dart';
 import 'package:socialmind/shared_preferences.dart';
@@ -60,6 +61,6 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: _loggedIn ? Homepg() : StartPage());
+        home: _loggedIn ? test() : StartPage());
   }
 }
