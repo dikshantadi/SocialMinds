@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:socialmind/Frontend/Camera/Camerapage.dart';
 import 'package:socialmind/Frontend/Chat/Chatbot/Chatbot.dart';
 import 'package:socialmind/Frontend/Chat/Chatpage.dart';
+import 'package:socialmind/Frontend/Friend/FindFriendPage.dart';
+import 'package:socialmind/Frontend/Friend/FriendRequestsPage.dart';
 import 'package:socialmind/Frontend/Login/Changepassword.dart';
 import 'package:socialmind/Frontend/Login/Login.dart';
 import '../backend/authentication.dart';
@@ -236,6 +238,27 @@ class _HomepgState extends State<Homepg> {
               onTap: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => CameraPage()));
+              },
+            ),
+            ListTile(
+              leading: Icon(Iconsax.search_normal),
+              title: Text('Find Friends'),
+              onTap: () {
+          // Implement navigation to find friends page here
+              // Navigator.push(
+              // context, MaterialPageRoute(builder: (context) => FindFriendsPage()));
+              Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => FindFriendsPage()));
+               },
+            ),
+            ListTile(
+            leading: Icon(Iconsax.notification),
+            title: Text('Friend Requests'),
+             onTap: () {
+            //  Navigator.push(
+            //  context, MaterialPageRoute(builder: (context) => FriendRequestsPage()));
+            Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => FriendRequestsPage()));
               },
             ),
             ListTile(
