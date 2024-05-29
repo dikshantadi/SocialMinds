@@ -5,6 +5,8 @@ class Database {
   Database({this.uid});
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection("Users");
+  final CollectionReference postCollection =
+      FirebaseFirestore.instance.collection("Posts");
 
   Future<void> createUserDocument(String userName, email) async {
     try {
@@ -12,7 +14,8 @@ class Database {
         'userName': userName,
         'email': email,
         'profilePicture': '',
-        'friendList': []
+        'friendList': [],
+        'postList': []
       };
       print(userData);
 
@@ -40,7 +43,9 @@ class Database {
   }
 
   Future uploadPostByUser(Map<String, dynamic> postData) async {
-    await Database().userCollection.doc(uid).collection('posts').add(postData);
-    return null;
+    DocumentReference document = await postCollection.add(postData);
+    await Database(uid: uid).userCollection.doc(uid).update({
+      'postList': FieldValue.arrayUnion(["${document.id}"])
+    });
   }
 }

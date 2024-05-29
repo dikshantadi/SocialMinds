@@ -229,6 +229,8 @@ class _CameraPageState extends State<CameraPage> {
         if (value != 'error') {
           String downloadUrl = value;
           postData = {
+            'postedBy': FirebaseAuth.instance.currentUser!.uid,
+            'time': DateTime.now().millisecondsSinceEpoch,
             'caption': _descriptionController.text,
             'imageUrl': downloadUrl
           };
