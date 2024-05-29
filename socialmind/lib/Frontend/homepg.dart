@@ -285,7 +285,6 @@ class _HomepgState extends State<Homepg> {
               leading: Icon(Iconsax.password_check),
               title: Text('Change password'),
               onTap: () {
-                // Implement navigation to settings page here
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -310,8 +309,6 @@ class _HomepgState extends State<Homepg> {
               leading: Icon(Iconsax.logout),
               title: Text('Logout'),
               onTap: () {
-                // Implement navigation to settings page here
-
                 _showLogoutConfirmationDialog(context); // Pass the context
               },
             ),
