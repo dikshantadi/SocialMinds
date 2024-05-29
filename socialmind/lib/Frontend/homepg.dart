@@ -244,21 +244,23 @@ class _HomepgState extends State<Homepg> {
               leading: Icon(Iconsax.search_normal),
               title: Text('Find Friends'),
               onTap: () {
-          // Implement navigation to find friends page here
-              // Navigator.push(
-              // context, MaterialPageRoute(builder: (context) => FindFriendsPage()));
-              Navigator.push(context,
+                // Implement navigation to find friends page here
+                // Navigator.push(
+                // context, MaterialPageRoute(builder: (context) => FindFriendsPage()));
+                Navigator.push(context,
                     MaterialPageRoute(builder: (context) => FindFriendsPage()));
-               },
+              },
             ),
             ListTile(
-            leading: Icon(Iconsax.notification),
-            title: Text('Friend Requests'),
-             onTap: () {
-            //  Navigator.push(
-            //  context, MaterialPageRoute(builder: (context) => FriendRequestsPage()));
-            Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => FriendRequestsPage()));
+              leading: Icon(Iconsax.notification),
+              title: Text('Friend Requests'),
+              onTap: () {
+                //  Navigator.push(
+                //  context, MaterialPageRoute(builder: (context) => FriendRequestsPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => FriendRequestsPage()));
               },
             ),
             ListTile(
