@@ -1,6 +1,6 @@
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:socialmind/backend/friend_database_service.dart';
 
 class FriendRequestsPage extends StatefulWidget {
@@ -19,19 +19,11 @@ class _FriendRequestsPageState extends State<FriendRequestsPage> {
   }
 
   void _loadFriendRequests() async {
-    try {
-      QuerySnapshot requests = await DatabaseService().getFriendRequests();
-      setState(() {
-        _friendRequests = requests;
-        _isLoading = false;
-      });
-      print("Friend requests loaded: ${_friendRequests?.docs.length}");
-    } catch (e) {
-      print("Error loading friend requests: $e");
-      setState(() {
-        _isLoading = false;
-      });
-    }
+    QuerySnapshot requests = await DatabaseService().getFriendRequests();
+    setState(() {
+      _friendRequests = requests;
+      _isLoading = false;
+    });
   }
 
   void _acceptRequest(String requestId, String fromUserId) async {
@@ -60,7 +52,21 @@ class _FriendRequestsPageState extends State<FriendRequestsPage> {
                   itemBuilder: (context, index) {
                     var request = _friendRequests!.docs[index];
                     return ListTile(
-                      title: Text(request['from']),
+                      title: FutureBuilder<DocumentSnapshot>(
+                        future: FirebaseFirestore.instance.collection('Users').doc(request['from']).get(),
+                        builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                          if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          }
+
+                          if (snapshot.connectionState == ConnectionState.done) {
+                            Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+                            return Text(data['userName']); // Assuming userName is the field containing the username
+                          }
+
+                          return CircularProgressIndicator();
+                        },
+                      ),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
