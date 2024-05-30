@@ -7,9 +7,14 @@ import 'package:socialmind/Frontend/Login/Signup.dart';
 import 'package:socialmind/Widgets/Custom_scaffold.dart';
 import 'package:socialmind/Widgets/buttom.dart';
 
-class Welcomepg extends StatelessWidget {
+class Welcomepg extends StatefulWidget {
   const Welcomepg({super.key});
 
+  @override
+  State<Welcomepg> createState() => _WelcomepgState();
+}
+
+class _WelcomepgState extends State<Welcomepg> {
   @override
   Widget build(BuildContext context) {
     return Custom_scaffold(
