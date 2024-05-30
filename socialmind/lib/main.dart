@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:socialmind/Frontend/Friend/FindFriendPage.dart';
 import 'package:socialmind/Frontend/Login/Signup.dart';
 import 'package:socialmind/Frontend/Login/verifyEmail.dart';
 import 'package:socialmind/Frontend/StartPage.dart';
@@ -61,6 +62,6 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: _loggedIn ? test() : StartPage());
+        home: _loggedIn ? FindFriendsPage() : StartPage());
   }
 }

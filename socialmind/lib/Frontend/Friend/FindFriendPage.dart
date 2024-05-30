@@ -25,7 +25,9 @@ class _FindFriendsPageState extends State<FindFriendsPage> {
       setState(() {
         _isLoading = true;
       });
-      QuerySnapshot results = await DatabaseService().searchByUsername(_searchQuery);
+      QuerySnapshot results =
+          await DatabaseService().searchByUsername(_searchQuery);
+      print(results.docs[0]['email']);
       setState(() {
         _searchResults = results;
         _isLoading = false;
@@ -35,7 +37,8 @@ class _FindFriendsPageState extends State<FindFriendsPage> {
 
   void _sendFriendRequest(String userId) async {
     await DatabaseService().sendFriendRequest(userId);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Friend request sent')));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text('Friend request sent')));
   }
 
   @override
@@ -82,3 +85,87 @@ class _FindFriendsPageState extends State<FindFriendsPage> {
     );
   }
 }
+
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:flutter/foundation.dart';
+// import 'package:flutter/material.dart';
+// import 'package:socialmind/backend/database.dart';
+
+// class Search extends StatefulWidget {
+//   const Search({super.key});
+
+//   @override
+//   State<Search> createState() => _SearchState();
+// }
+
+// class _SearchState extends State<Search> {
+//   bool _isLoading = false;
+//   String? userName;
+//   QuerySnapshot? snapshot;
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         backgroundColor: Colors.blue,
+//         title: Text("Search Page"),
+//         actions: [
+//           Container(
+//             width: 300,
+//             child: TextField(
+//                 decoration: InputDecoration(
+//                   suffixIcon: IconButton(
+//                     onPressed: () {
+//                       search();
+//                     },
+//                     icon: Icon(Icons.search),
+//                   ),
+//                   hintText: 'Search for friends',
+//                 ),
+//                 onChanged: (value) {
+//                   setState(() {
+//                     _isLoading = true;
+//                     userName = value;
+//                   });
+//                   search();
+//                 }),
+//           ),
+//         ],
+//       ),
+//       body: _isLoading
+//           ? Center(child: CircularProgressIndicator())
+//           : snapshot == null
+//               ? Center(child: Text('Search for friends'))
+//               : ListView.builder(
+//                   itemCount: snapshot!.docs.length,
+//                   itemBuilder: (context, index) {
+//                     var user = snapshot!.docs[index];
+//                     return ListTile(
+//                       title: Text(user['userName']),
+//                       subtitle: Text(user['email']),
+//                       trailing: ElevatedButton(
+//                         onPressed: () {
+//                           print('sent');
+//                         },
+//                         child: Text('Add Friend'),
+//                       ),
+//                     );
+//                   },
+//                 ),
+//     );
+//   }
+
+//   search() async {
+//     await Database(uid: FirebaseAuth.instance.currentUser!.uid)
+//         .searchUserByName(userName!)
+//         .then((value) {
+//       if (value != null) {
+//         setState(() {
+//           _isLoading = false;
+//           snapshot = value;
+//           print(snapshot!.docs[0]['email']);
+//         });
+//       }
+//     });
+//   }
+// }

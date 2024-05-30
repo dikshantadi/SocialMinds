@@ -29,9 +29,11 @@ class DatabaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<QuerySnapshot> searchByUsername(String username) {
-    return _firestore.collection('users')
-        .where('username', isGreaterThanOrEqualTo: username)
-        .where('username', isLessThanOrEqualTo: username + '\uf8ff')
+    print(username);
+    return _firestore
+        .collection('users')
+        .where('userName', isGreaterThanOrEqualTo: username)
+        .where('userName', isLessThanOrEqualTo: username + '\uf8ff')
         .get();
   }
 
@@ -49,7 +51,8 @@ class DatabaseService {
   Future<QuerySnapshot> getFriendRequests() {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
-      return _firestore.collection('friendRequests')
+      return _firestore
+          .collection('friendRequests')
           .where('to', isEqualTo: currentUser.uid)
           .where('status', isEqualTo: 'pending')
           .get();
@@ -60,7 +63,10 @@ class DatabaseService {
   Future<void> acceptFriendRequest(String requestId, String fromUserId) async {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
-      await _firestore.collection('friendRequests').doc(requestId).update({'status': 'accepted'});
+      await _firestore
+          .collection('friendRequests')
+          .doc(requestId)
+          .update({'status': 'accepted'});
       await _firestore.collection('friendships').add({
         'user1': currentUser.uid,
         'user2': fromUserId,
@@ -69,13 +75,17 @@ class DatabaseService {
   }
 
   Future<void> rejectFriendRequest(String requestId) async {
-    await _firestore.collection('friendRequests').doc(requestId).update({'status': 'rejected'});
+    await _firestore
+        .collection('friendRequests')
+        .doc(requestId)
+        .update({'status': 'rejected'});
   }
 
   Future<QuerySnapshot> getFriends() {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
-      return _firestore.collection('friendships')
+      return _firestore
+          .collection('friendships')
           .where('user1', isEqualTo: currentUser.uid)
           .where('user2', isEqualTo: currentUser.uid)
           .get();
