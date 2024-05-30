@@ -16,8 +16,8 @@ class _FindFriendsPageState extends State<FindFriendsPage> {
   void _onSearchChanged() {
     setState(() {
       _searchQuery = _searchController.text.trim();
-      _search();
     });
+    _search();
   }
 
   void _search() async {
@@ -25,15 +25,28 @@ class _FindFriendsPageState extends State<FindFriendsPage> {
       setState(() {
         _isLoading = true;
       });
-      QuerySnapshot results = await DatabaseService().searchByUsername(_searchQuery);
-      setState(() {
-        _searchResults = results;
-        _isLoading = false;
-      });
+      try {
+        print("Initiating search with query: $_searchQuery");
+        QuerySnapshot results = await DatabaseService().searchByUsername(_searchQuery);
+        setState(() {
+          _searchResults = results;
+          _isLoading = false;
+        });
+        print("Search results count: ${_searchResults?.docs.length}");
+        _searchResults?.docs.forEach((doc) {
+          print("Found user: ${doc.data()}");
+        });
+      } catch (e) {
+        print("Error during search: $e");
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
   void _sendFriendRequest(String userId) async {
+    print("Sending friend request to $userId");
     await DatabaseService().sendFriendRequest(userId);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Friend request sent')));
   }
@@ -70,7 +83,7 @@ class _FindFriendsPageState extends State<FindFriendsPage> {
                   itemBuilder: (context, index) {
                     var user = _searchResults!.docs[index];
                     return ListTile(
-                      title: Text(user['username']),
+                      title: Text(user['userName']),
                       subtitle: Text(user['email']),
                       trailing: ElevatedButton(
                         onPressed: () => _sendFriendRequest(user.id),

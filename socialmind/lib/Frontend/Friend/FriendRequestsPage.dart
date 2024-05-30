@@ -19,11 +19,19 @@ class _FriendRequestsPageState extends State<FriendRequestsPage> {
   }
 
   void _loadFriendRequests() async {
-    QuerySnapshot requests = await DatabaseService().getFriendRequests();
-    setState(() {
-      _friendRequests = requests;
-      _isLoading = false;
-    });
+    try {
+      QuerySnapshot requests = await DatabaseService().getFriendRequests();
+      setState(() {
+        _friendRequests = requests;
+        _isLoading = false;
+      });
+      print("Friend requests loaded: ${_friendRequests?.docs.length}");
+    } catch (e) {
+      print("Error loading friend requests: $e");
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   void _acceptRequest(String requestId, String fromUserId) async {
