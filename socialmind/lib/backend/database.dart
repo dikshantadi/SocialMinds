@@ -42,6 +42,15 @@ class Database {
     return sp;
   }
 
+  Future searchUserByName(String name) async {
+    QuerySnapshot snapshot = await userCollection
+        .where('userName', isGreaterThanOrEqualTo: name)
+        .get();
+    return snapshot;
+  }
+
+  Future sendFriendRequest(Map<String, dynamic> friendReq) async {}
+
   Future uploadPostByUser(Map<String, dynamic> postData) async {
     DocumentReference document = await postCollection.add(postData);
     await Database(uid: uid).userCollection.doc(uid).update({
