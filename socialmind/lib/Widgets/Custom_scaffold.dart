@@ -11,18 +11,21 @@ class Custom_scaffold extends StatelessWidget {
         elevation: 0,
       ),
       extendBodyBehindAppBar: true,
-      body: Stack(
-        children: [
-          Image.asset(
-            'assets/Images/Abstract.jpg',
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: double.infinity,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.deepPurpleAccent,
+              Colors.pinkAccent,
+              Colors.blueAccent,
+            ],
           ),
-          SafeArea(
-            child: child!,
-          )
-        ],
+        ),
+        child: SafeArea(
+          child: child!,
+        ),
       ),
     );
   }
