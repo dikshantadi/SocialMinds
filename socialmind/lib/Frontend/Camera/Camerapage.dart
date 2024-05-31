@@ -8,6 +8,8 @@ import 'package:socialmind/backend/database.dart';
 import 'package:socialmind/backend/storage.dart';
 
 class CameraPage extends StatefulWidget {
+  final String userName;
+  const CameraPage({super.key, required this.userName});
   @override
   _CameraPageState createState() => _CameraPageState();
 }
@@ -229,7 +231,8 @@ class _CameraPageState extends State<CameraPage> {
         if (value != 'error') {
           String downloadUrl = value;
           postData = {
-            'postedBy': FirebaseAuth.instance.currentUser!.uid,
+            'authorName': widget.userName,
+            'authorID': FirebaseAuth.instance.currentUser!.uid,
             'time': DateTime.now().millisecondsSinceEpoch,
             'caption': _descriptionController.text,
             'imageUrl': downloadUrl

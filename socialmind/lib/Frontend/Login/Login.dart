@@ -214,7 +214,7 @@ class _LoginPageState extends State<LoginPage> {
                             },
                             height: 45,
                             minWidth: double.infinity,
-                            color: Colors.black,
+                            //color: Colors.black,
                             textColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),

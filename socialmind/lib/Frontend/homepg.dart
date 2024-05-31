@@ -11,6 +11,7 @@ import 'package:socialmind/Frontend/Friend/FriendRequestsPage.dart';
 import 'package:socialmind/Frontend/Login/Changepassword.dart';
 import 'package:socialmind/Frontend/Login/Login.dart';
 import 'package:socialmind/Frontend/test.dart';
+import 'package:socialmind/Widgets/postTemplate.dart';
 import '../backend/authentication.dart';
 import '../shared_preferences.dart';
 import 'package:socialmind/Frontend/Stats.dart';
@@ -33,9 +34,42 @@ class _HomepgState extends State<Homepg> {
   @override
   String? userName;
   Authentication auth = Authentication();
+  QuerySnapshot? postSnapshot;
+  List postInfos = [];
   void initState() {
     getUserData();
+    getPosts();
     super.initState();
+  }
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   getUserData();
+  //   getPosts();
+  // }
+
+  getPosts() async {
+    await Database(uid: FirebaseAuth.instance.currentUser!.uid)
+        .getPosts()
+        .then((value) {
+      if (value != null) {
+        setState(() {
+          postSnapshot = value;
+        });
+      }
+    });
+    // int postLength = postSnapshot!.docs.length;
+    // for (int i = 0; i < postLength; i++) {
+    //   await Database(uid: postSnapshot!.docs[i]['postedBy'])
+    //       .getUserData()
+    //       .then((value) {
+    //     if (value != null) {
+    //       DocumentSnapshot snapshot = value;
+    //       postInfos.add([["${snapshot['userName']}", "${snapshot[]}"]])
+    //     }
+    //   });
+    // }
   }
 
   getUserData() async {
@@ -245,8 +279,12 @@ class _HomepgState extends State<Homepg> {
               leading: Icon(Iconsax.camera),
               title: Text('Camera'),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CameraPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CameraPage(
+                              userName: userName!,
+                            )));
               },
             ),
             ListTile(
@@ -356,39 +394,20 @@ class _HomepgState extends State<Homepg> {
             Container(
               height: 2,
             ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: 3, // yo ni milaunu parxa backend batai
-              itemBuilder: (context, index) {
-                // backend bata chainxa yo pani
-                return Container(
-                  height: 400,
-                  margin: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                  decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(20),
-                      image: DecorationImage(
-                          image: AssetImage(
-                              "assets/Images/City.jpg"), //essai rakheko ho
-                          fit: BoxFit.cover)),
-                  child: Column(
-                    children: [
-                      Row(),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.more_vert),
-                          color: Colors.white,
-                          iconSize: 30,
-                        ),
-                      )
-                    ],
+            postSnapshot == null
+                ? Text('null')
+                : ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: postSnapshot!
+                        .docs.length, // yo ni milaunu parxa backend batai
+                    itemBuilder: (context, index) {
+                      return postTemplate(
+                          postSnapshot!.docs[index]['authorName'],
+                          postSnapshot!.docs[index]['caption'],
+                          postSnapshot!.docs[index]['imageUrl']);
+                    },
                   ),
-                );
-              },
-            ),
           ],
         ),
       ),

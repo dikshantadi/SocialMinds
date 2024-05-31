@@ -16,8 +16,8 @@ class _FindFriendsPageState extends State<FindFriendsPage> {
   void _onSearchChanged() {
     setState(() {
       _searchQuery = _searchController.text.trim();
-      _search();
     });
+    _search();
   }
 
   void _search() async {
@@ -25,44 +25,83 @@ class _FindFriendsPageState extends State<FindFriendsPage> {
       setState(() {
         _isLoading = true;
       });
-      QuerySnapshot results =
-          await DatabaseService().searchByUsername(_searchQuery);
-      print(results.docs[0]['email']);
-      setState(() {
-        _searchResults = results;
-        _isLoading = false;
-      });
+      try {
+        print("Initiating search with query: $_searchQuery");
+        QuerySnapshot results =
+            await DatabaseService().searchByUsername(_searchQuery);
+        setState(() {
+          _searchResults = results;
+          _isLoading = false;
+        });
+        print("Search results count: ${_searchResults?.docs.length}");
+        _searchResults?.docs.forEach((doc) {
+          print("Found user: ${doc.data()}");
+        });
+      } catch (e) {
+        print("Error during search: $e");
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
   void _sendFriendRequest(String userId) async {
+    print("Sending friend request to $userId");
     await DatabaseService().sendFriendRequest(userId);
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text('Friend request sent')));
   }
 
+  Future<String> _getFriendshipStatus(String userId) async {
+    return await DatabaseService().getFriendshipStatus(userId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Find Friends'),
-        backgroundColor: Colors.orange,
-        actions: [
-          Container(
-            width: 300,
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: _search,
-                ),
-                hintText: 'Search for friends',
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(70),
+        child: AppBar(
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.deepOrangeAccent,
+                  Colors.deepPurpleAccent,
+                ],
               ),
-              onChanged: (value) => _onSearchChanged(),
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(20),
+              ),
             ),
           ),
-        ],
+          title: Text(
+            'Find Friends',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+            ),
+          ),
+          actions: [
+            Container(
+              width: 300,
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: _search,
+                  ),
+                  hintText: 'Search for friends',
+                ),
+                onChanged: (value) => _onSearchChanged(),
+              ),
+            ),
+          ],
+        ),
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
@@ -72,100 +111,43 @@ class _FindFriendsPageState extends State<FindFriendsPage> {
                   itemCount: _searchResults!.docs.length,
                   itemBuilder: (context, index) {
                     var user = _searchResults!.docs[index];
-                    return ListTile(
-                      title: Text(user['username']),
-                      subtitle: Text(user['email']),
-                      trailing: ElevatedButton(
-                        onPressed: () => _sendFriendRequest(user.id),
-                        child: Text('Add Friend'),
-                      ),
+                    return FutureBuilder<String>(
+                      future: _getFriendshipStatus(user.id),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        }
+                        String status = snapshot.data ?? 'none';
+                        return ListTile(
+                          title: Text(user['userName']),
+                          subtitle: Text(user['email']),
+                          trailing: ElevatedButton(
+                            onPressed: status == 'none'
+                                ? () => _sendFriendRequest(user.id)
+                                : null,
+                            child: Text(status == 'none'
+                                ? 'Add Friend'
+                                : status == 'pending'
+                                    ? 'Request Sent'
+                                    : 'Friend'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: status == 'none'
+                                  ? Colors
+                                      .deepOrangeAccent // Button color for "Add Friend"
+                                  : status == 'pending'
+                                      ? Colors
+                                          .grey // Button color for "Request Sent"
+                                      : Colors
+                                          .green, // Button color for "Friend"
+                              foregroundColor: Colors.white,
+                            ),
+                          ),
+                        );
+                      },
                     );
                   },
                 ),
     );
   }
 }
-
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/foundation.dart';
-// import 'package:flutter/material.dart';
-// import 'package:socialmind/backend/database.dart';
-
-// class Search extends StatefulWidget {
-//   const Search({super.key});
-
-//   @override
-//   State<Search> createState() => _SearchState();
-// }
-
-// class _SearchState extends State<Search> {
-//   bool _isLoading = false;
-//   String? userName;
-//   QuerySnapshot? snapshot;
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         backgroundColor: Colors.blue,
-//         title: Text("Search Page"),
-//         actions: [
-//           Container(
-//             width: 300,
-//             child: TextField(
-//                 decoration: InputDecoration(
-//                   suffixIcon: IconButton(
-//                     onPressed: () {
-//                       search();
-//                     },
-//                     icon: Icon(Icons.search),
-//                   ),
-//                   hintText: 'Search for friends',
-//                 ),
-//                 onChanged: (value) {
-//                   setState(() {
-//                     _isLoading = true;
-//                     userName = value;
-//                   });
-//                   search();
-//                 }),
-//           ),
-//         ],
-//       ),
-//       body: _isLoading
-//           ? Center(child: CircularProgressIndicator())
-//           : snapshot == null
-//               ? Center(child: Text('Search for friends'))
-//               : ListView.builder(
-//                   itemCount: snapshot!.docs.length,
-//                   itemBuilder: (context, index) {
-//                     var user = snapshot!.docs[index];
-//                     return ListTile(
-//                       title: Text(user['userName']),
-//                       subtitle: Text(user['email']),
-//                       trailing: ElevatedButton(
-//                         onPressed: () {
-//                           print('sent');
-//                         },
-//                         child: Text('Add Friend'),
-//                       ),
-//                     );
-//                   },
-//                 ),
-//     );
-//   }
-
-//   search() async {
-//     await Database(uid: FirebaseAuth.instance.currentUser!.uid)
-//         .searchUserByName(userName!)
-//         .then((value) {
-//       if (value != null) {
-//         setState(() {
-//           _isLoading = false;
-//           snapshot = value;
-//           print(snapshot!.docs[0]['email']);
-//         });
-//       }
-//     });
-//   }
-// }

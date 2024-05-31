@@ -17,8 +17,7 @@ class pg3 extends StatelessWidget {
                   Lottie.asset('assets/Chatbot.json', height: 350, width: 350),
             ),
           ),
-          const SizedBox(
-              height: 2), // Adjust the space between the animation and the text
+          const SizedBox(height: 2),
           const Text(
             'Chat with our own designed AI Chat-Bot',
             style: TextStyle(

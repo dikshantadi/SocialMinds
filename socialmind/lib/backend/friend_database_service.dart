@@ -1,45 +1,29 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-
-// class DatabaseService {
-//   // Firestore instance
-//   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-//   // Search for users by username
-//   Future<QuerySnapshot> searchByUsername(String username) async {
-//     return await _firestore
-//         .collection('users')
-//         .where('username', isGreaterThanOrEqualTo: username)
-//         .where('username', isLessThanOrEqualTo: username + '\uf8ff')
-//         .get();
-//   }
-
-//   // Send a friend request
-//   Future<void> sendFriendRequest(String fromUserId, String toUserId) async {
-//     await _firestore.collection('friendRequests').add({
-//       'from': fromUserId,
-//       'to': toUserId,
-//       'status': 'pending',
-//     });
-//   }
-// }
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class DatabaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<QuerySnapshot> searchByUsername(String username) {
-    print(username);
-    return _firestore
-        .collection('users')
+  Future<QuerySnapshot> searchByUsername(String username) async {
+    print("Searching for username: $username");
+    Query query = _firestore
+        .collection('Users')
         .where('userName', isGreaterThanOrEqualTo: username)
-        .where('userName', isLessThanOrEqualTo: username + '\uf8ff')
-        .get();
+        .where('userName', isLessThanOrEqualTo: username + '\uf8ff');
+    print("Constructed query: $query");
+
+    QuerySnapshot result = await query.get();
+    print("Search results count: ${result.docs.length}");
+    for (var doc in result.docs) {
+      print("User found: ${doc.data()}");
+    }
+    return result;
   }
 
   Future<void> sendFriendRequest(String toUserId) async {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
+      print("Sending friend request from ${currentUser.uid} to $toUserId");
       await _firestore.collection('friendRequests').add({
         'from': currentUser.uid,
         'to': toUserId,
@@ -51,6 +35,7 @@ class DatabaseService {
   Future<QuerySnapshot> getFriendRequests() {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
+      print("Fetching friend requests for ${currentUser.uid}");
       return _firestore
           .collection('friendRequests')
           .where('to', isEqualTo: currentUser.uid)
@@ -63,6 +48,7 @@ class DatabaseService {
   Future<void> acceptFriendRequest(String requestId, String fromUserId) async {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
+      print("Accepting friend request $requestId from $fromUserId");
       await _firestore
           .collection('friendRequests')
           .doc(requestId)
@@ -71,10 +57,21 @@ class DatabaseService {
         'user1': currentUser.uid,
         'user2': fromUserId,
       });
+      try {
+        await _firestore.collection('Users').doc(currentUser.uid).update({
+          'friendList': FieldValue.arrayUnion(['${fromUserId}'])
+        });
+        await _firestore.collection('Users').doc(fromUserId).update({
+          'friendList': FieldValue.arrayUnion(['${currentUser.uid}'])
+        });
+      } catch (e) {
+        print(e);
+      }
     }
   }
 
   Future<void> rejectFriendRequest(String requestId) async {
+    print("Rejecting friend request $requestId");
     await _firestore
         .collection('friendRequests')
         .doc(requestId)
@@ -84,11 +81,52 @@ class DatabaseService {
   Future<QuerySnapshot> getFriends() {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
+      print("Fetching friends for ${currentUser.uid}");
       return _firestore
           .collection('friendships')
           .where('user1', isEqualTo: currentUser.uid)
           .where('user2', isEqualTo: currentUser.uid)
           .get();
+    }
+    throw Exception('User not authenticated');
+  }
+
+  Future<String> getFriendshipStatus(String userId) async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      QuerySnapshot sentRequests = await _firestore
+          .collection('friendRequests')
+          .where('from', isEqualTo: currentUser.uid)
+          .where('to', isEqualTo: userId)
+          .get();
+
+      if (sentRequests.docs.isNotEmpty) {
+        return sentRequests
+            .docs.first['status']; // Returns 'pending' or 'accepted'
+      }
+
+      QuerySnapshot receivedRequests = await _firestore
+          .collection('friendRequests')
+          .where('from', isEqualTo: userId)
+          .where('to', isEqualTo: currentUser.uid)
+          .get();
+
+      if (receivedRequests.docs.isNotEmpty) {
+        return receivedRequests
+            .docs.first['status']; // Returns 'pending' or 'accepted'
+      }
+
+      QuerySnapshot friendships = await _firestore
+          .collection('friendships')
+          .where('user1', isEqualTo: currentUser.uid)
+          .where('user2', isEqualTo: userId)
+          .get();
+
+      if (friendships.docs.isNotEmpty) {
+        return 'friends';
+      }
+
+      return 'none';
     }
     throw Exception('User not authenticated');
   }

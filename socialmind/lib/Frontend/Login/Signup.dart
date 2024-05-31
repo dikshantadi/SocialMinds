@@ -297,7 +297,7 @@ class _SignupState extends State<Signup> {
   register() async {
     if (formKey.currentState!.validate()) {
       await auth
-          .registerWithEmail(userName!, email!, password!)
+          .registerWithEmail(userName!.trim(), email!.trim(), password!)
           .then((value) async {
         if (value == null) {
           final uid = await auth.firebaseAuth.currentUser!.uid;
