@@ -18,9 +18,7 @@ class pg1 extends StatelessWidget {
                   height: 350, width: 350),
             ),
           ),
-          SizedBox(
-              height:
-                  20), // Adjust the space between the animation and the text
+          SizedBox(height: 20),
           const Text(
             'Welcome to SocialMind\n A simple social media',
             style: TextStyle(
