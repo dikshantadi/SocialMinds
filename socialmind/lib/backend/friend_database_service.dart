@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -68,6 +69,41 @@ class DatabaseService {
           .where('user1', isEqualTo: currentUser.uid)
           .where('user2', isEqualTo: currentUser.uid)
           .get();
+    }
+    throw Exception('User not authenticated');
+  }
+
+  Future<String> getFriendshipStatus(String userId) async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      QuerySnapshot sentRequests = await _firestore.collection('friendRequests')
+          .where('from', isEqualTo: currentUser.uid)
+          .where('to', isEqualTo: userId)
+          .get();
+
+      if (sentRequests.docs.isNotEmpty) {
+        return sentRequests.docs.first['status']; // Returns 'pending' or 'accepted'
+      }
+
+      QuerySnapshot receivedRequests = await _firestore.collection('friendRequests')
+          .where('from', isEqualTo: userId)
+          .where('to', isEqualTo: currentUser.uid)
+          .get();
+
+      if (receivedRequests.docs.isNotEmpty) {
+        return receivedRequests.docs.first['status']; // Returns 'pending' or 'accepted'
+      }
+
+      QuerySnapshot friendships = await _firestore.collection('friendships')
+          .where('user1', isEqualTo: currentUser.uid)
+          .where('user2', isEqualTo: userId)
+          .get();
+
+      if (friendships.docs.isNotEmpty) {
+        return 'friends';
+      }
+
+      return 'none';
     }
     throw Exception('User not authenticated');
   }

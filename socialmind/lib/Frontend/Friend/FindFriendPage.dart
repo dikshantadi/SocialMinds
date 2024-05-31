@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:socialmind/backend/friend_database_service.dart';
@@ -45,10 +46,15 @@ class _FindFriendsPageState extends State<FindFriendsPage> {
     }
   }
 
+  Future<String> _getButtonLabel(String userId) async {
+    return await DatabaseService().getFriendshipStatus(userId);
+  }
+
   void _sendFriendRequest(String userId) async {
     print("Sending friend request to $userId");
     await DatabaseService().sendFriendRequest(userId);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Friend request sent')));
+    setState(() {});
   }
 
   @override
@@ -82,13 +88,26 @@ class _FindFriendsPageState extends State<FindFriendsPage> {
                   itemCount: _searchResults!.docs.length,
                   itemBuilder: (context, index) {
                     var user = _searchResults!.docs[index];
-                    return ListTile(
-                      title: Text(user['userName']),
-                      subtitle: Text(user['email']),
-                      trailing: ElevatedButton(
-                        onPressed: () => _sendFriendRequest(user.id),
-                        child: Text('Add Friend'),
-                      ),
+                    return FutureBuilder<String>(
+                      future: _getButtonLabel(user.id),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return ListTile(
+                            title: Text(user['userName']),
+                            subtitle: Text(user['email']),
+                            trailing: CircularProgressIndicator(),
+                          );
+                        }
+                        String buttonLabel = snapshot.data!;
+                        return ListTile(
+                          title: Text(user['userName']),
+                          subtitle: Text(user['email']),
+                          trailing: ElevatedButton(
+                            onPressed: buttonLabel == 'none' ? () => _sendFriendRequest(user.id) : null,
+                            child: Text(buttonLabel == 'none' ? 'Add Friend' : buttonLabel == 'pending' ? 'Request Sent' : 'Friend'),
+                          ),
+                        );
+                      },
                     );
                   },
                 ),
