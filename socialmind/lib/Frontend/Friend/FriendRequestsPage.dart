@@ -39,9 +39,32 @@ class _FriendRequestsPageState extends State<FriendRequestsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Friend Requests'),
-        backgroundColor: Colors.orange,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(70),
+        child: AppBar(
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.deepOrangeAccent,
+                  Colors.deepPurpleAccent,
+                ],
+              ),
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(20),
+              ),
+            ),
+          ),
+          title: Text(
+            'Friend Requests',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+            ),
+          ),
+        ),
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
@@ -73,11 +96,18 @@ class _FriendRequestsPageState extends State<FriendRequestsPage> {
                           ElevatedButton(
                             onPressed: () => _acceptRequest(request.id, request['from']),
                             child: Text('Accept'),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.orangeAccent, // Button color for "Accept"
+                              ),
+                            
                           ),
                           SizedBox(width: 8),
                           ElevatedButton(
                             onPressed: () => _rejectRequest(request.id),
                             child: Text('Reject'),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.purpleAccent, // Button color for "Accept"
+                              ),
                           ),
                         ],
                       ),
