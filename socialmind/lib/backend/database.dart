@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:socialmind/Widgets/comment.dart';
 
 class Database {
   final String? uid;
@@ -86,5 +87,44 @@ class Database {
         .orderBy('time', descending: true)
         .get();
     return snapshot;
+  }
+
+  Future addLikes(String postID, Map<String, dynamic> likeData) async {
+    try {
+      await postCollection.doc(postID).collection('likes').add(likeData);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future getNumberOfLikesAndComment(postID) async {
+    QuerySnapshot snapshot =
+        await postCollection.doc(postID).collection('likes').get();
+    final likes = snapshot.docs.length;
+    QuerySnapshot commentSnapshot =
+        await postCollection.doc(postID).collection('Comments').get();
+
+    final comment = commentSnapshot.docs.length;
+
+    QuerySnapshot likedStatusSp = await postCollection
+        .doc(postID)
+        .collection('likes')
+        .where('likedBy', isEqualTo: uid)
+        .get();
+    if (likedStatusSp.docs.length == 0) {
+      Map<String, dynamic> likeAndComment = {
+        'likes': likes,
+        'comments': comment,
+        'likedByUser': false
+      };
+      return likeAndComment;
+    } else {
+      Map<String, dynamic> likeAndComment = {
+        'likes': likes,
+        'comments': comment,
+        'likedByUser': true
+      };
+      return likeAndComment;
+    }
   }
 }

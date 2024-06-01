@@ -419,7 +419,8 @@ class _HomepgState extends State<Homepg> {
                                           ['caption'])));
                         },
                         child: postTemplate(
-                            postedBy: postSnapshot!.docs[index]['authorName'],
+                            postID: postSnapshot!.docs[index].id,
+                            authorName: postSnapshot!.docs[index]['authorName'],
                             caption: postSnapshot!.docs[index]['caption'],
                             imageUrl: postSnapshot!.docs[index]['imageUrl']),
                       );

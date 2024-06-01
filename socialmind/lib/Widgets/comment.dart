@@ -27,6 +27,7 @@ class _commentState extends State<comment> {
   TextEditingController _commentController = TextEditingController();
   String? userName;
   QuerySnapshot? commentSnapshot;
+  bool _beingPosted = false;
   void initState() {
     getComments();
     super.initState();
@@ -37,7 +38,6 @@ class _commentState extends State<comment> {
       if (value != null) {
         setState(() {
           userName = value;
-          print(userName);
         });
       }
     });
@@ -165,19 +165,29 @@ class _commentState extends State<comment> {
           ),
           commentSnapshot == null
               ? Text('No comments')
-              : Expanded(
-                  child: ListView.builder(
-                    itemCount: commentSnapshot!.docs.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        leading: CircleAvatar(),
-                        title:
-                            Text(commentSnapshot!.docs[index]['commentorName']),
-                        subtitle: Text(commentSnapshot!.docs[index]['comment']),
-                      );
-                    },
-                  ),
-                ),
+              : _beingPosted
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                      ),
+                    )
+                  : Expanded(
+                      child: ListView.builder(
+                        itemCount: commentSnapshot!.docs.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            leading: CircleAvatar(
+                              child: Text(commentSnapshot!.docs[index]
+                                  ['commentorName'][0]),
+                            ),
+                            title: Text(
+                                commentSnapshot!.docs[index]['commentorName']),
+                            subtitle:
+                                Text(commentSnapshot!.docs[index]['comment']),
+                          );
+                        },
+                      ),
+                    ),
         ],
       ),
     );
@@ -185,6 +195,9 @@ class _commentState extends State<comment> {
 
   postComment() async {
     if (_commentController.text.isNotEmpty) {
+      setState(() {
+        _beingPosted = true;
+      });
       Map<String, dynamic> commentData = {
         'commentorID': FirebaseAuth.instance.currentUser!.uid,
         'commentorName': userName,
@@ -198,6 +211,7 @@ class _commentState extends State<comment> {
       });
       setState(() {
         _commentController.clear();
+        _beingPosted = false;
       });
     } else {
       print("Comment cannot be empty");
