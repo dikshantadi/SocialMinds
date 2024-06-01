@@ -69,4 +69,22 @@ class Database {
       print(e);
     }
   }
+
+  Future addCommentOnaPost(
+      String postID, Map<String, dynamic> commentData) async {
+    try {
+      await postCollection.doc(postID).collection("Comments").add(commentData);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future getComments(String postID) async {
+    QuerySnapshot snapshot = await postCollection
+        .doc(postID)
+        .collection("Comments")
+        .orderBy('time', descending: true)
+        .get();
+    return snapshot;
+  }
 }

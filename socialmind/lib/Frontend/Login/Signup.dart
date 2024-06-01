@@ -303,6 +303,7 @@ class _SignupState extends State<Signup> {
           final uid = await auth.firebaseAuth.currentUser!.uid;
           await SP.setLogInStatus(true);
           await SP.setEmail(email!);
+          await SP.setUserName(userName);
           await Database(uid: auth.firebaseAuth.currentUser!.uid)
               .getUserData()
               .then(

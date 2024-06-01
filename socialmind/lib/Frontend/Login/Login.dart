@@ -281,8 +281,6 @@ class _LoginPageState extends State<LoginPage> {
               }
             },
           );
-
-          print(uid);
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => Homepg()));
         } else {

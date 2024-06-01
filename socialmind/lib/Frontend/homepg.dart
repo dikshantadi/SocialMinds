@@ -11,6 +11,7 @@ import 'package:socialmind/Frontend/Friend/FriendRequestsPage.dart';
 import 'package:socialmind/Frontend/Login/Changepassword.dart';
 import 'package:socialmind/Frontend/Login/Login.dart';
 import 'package:socialmind/Frontend/test.dart';
+import 'package:socialmind/Widgets/comment.dart';
 import 'package:socialmind/Widgets/postTemplate.dart';
 import '../backend/authentication.dart';
 import '../shared_preferences.dart';
@@ -395,17 +396,33 @@ class _HomepgState extends State<Homepg> {
               height: 2,
             ),
             postSnapshot == null
-                ? Text('null')
+                ? CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                  )
                 : ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: postSnapshot!
-                        .docs.length, // yo ni milaunu parxa backend batai
+                    itemCount: postSnapshot!.docs.length,
                     itemBuilder: (context, index) {
-                      return postTemplate(
-                          postSnapshot!.docs[index]['authorName'],
-                          postSnapshot!.docs[index]['caption'],
-                          postSnapshot!.docs[index]['imageUrl']);
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => comment(
+                                      postID: postSnapshot!.docs[index].id,
+                                      postedBy: postSnapshot!.docs[index]
+                                          ['authorName'],
+                                      imageUrl: postSnapshot!.docs[index]
+                                          ['imageUrl'],
+                                      caption: postSnapshot!.docs[index]
+                                          ['caption'])));
+                        },
+                        child: postTemplate(
+                            postedBy: postSnapshot!.docs[index]['authorName'],
+                            caption: postSnapshot!.docs[index]['caption'],
+                            imageUrl: postSnapshot!.docs[index]['imageUrl']),
+                      );
                     },
                   ),
           ],
