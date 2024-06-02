@@ -35,7 +35,7 @@ class _HomepgState extends State<Homepg> {
   @override
   String? userName;
   Authentication auth = Authentication();
-  QuerySnapshot? postSnapshot;
+  List? postSnapshot;
   List postInfos = [];
   void initState() {
     getUserData();
@@ -56,7 +56,14 @@ class _HomepgState extends State<Homepg> {
         .then((value) {
       if (value != null) {
         setState(() {
-          postSnapshot = value;
+          QuerySnapshot snapshot = value;
+          List postSnapshot1 = snapshot.docs;
+          postSnapshot1!.sort(
+            (a, b) => a['time'].compareTo(b['time']),
+          );
+          postSnapshot = postSnapshot1.reversed.toList();
+          print(
+              'this is the snapshot postSnapshot ${postSnapshot![1]['authorID']} ');
         });
       }
     });
@@ -402,7 +409,7 @@ class _HomepgState extends State<Homepg> {
                 : ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: postSnapshot!.docs.length,
+                    itemCount: postSnapshot!.length,
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
@@ -410,19 +417,19 @@ class _HomepgState extends State<Homepg> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => comment(
-                                      postID: postSnapshot!.docs[index].id,
-                                      postedBy: postSnapshot!.docs[index]
+                                      postID: postSnapshot![index].id,
+                                      postedBy: postSnapshot![index]
                                           ['authorName'],
-                                      imageUrl: postSnapshot!.docs[index]
+                                      imageUrl: postSnapshot![index]
                                           ['imageUrl'],
-                                      caption: postSnapshot!.docs[index]
+                                      caption: postSnapshot![index]
                                           ['caption'])));
                         },
                         child: postTemplate(
-                            postID: postSnapshot!.docs[index].id,
-                            authorName: postSnapshot!.docs[index]['authorName'],
-                            caption: postSnapshot!.docs[index]['caption'],
-                            imageUrl: postSnapshot!.docs[index]['imageUrl']),
+                            postID: postSnapshot![index].id,
+                            authorName: postSnapshot![index]['authorName'],
+                            caption: postSnapshot![index]['caption'],
+                            imageUrl: postSnapshot![index]['imageUrl']),
                       );
                     },
                   ),

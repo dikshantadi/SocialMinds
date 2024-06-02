@@ -16,6 +16,7 @@ class CameraPage extends StatefulWidget {
 }
 
 class _CameraPageState extends State<CameraPage> {
+  bool _isLoading = false;
   late List<CameraDescription> cameras;
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
@@ -148,7 +149,8 @@ class _CameraPageState extends State<CameraPage> {
               onPressed: () {
                 // Perform sharing logic here
                 // You can upload the image to Firebase Storage and save the description to Firestore or any other action
-                uploadPost(); // Close all dialogs
+                uploadPost();
+                Navigator.pop(context); // Close all dialogs
               },
               child: Text('Share'),
             ),
@@ -160,72 +162,79 @@ class _CameraPageState extends State<CameraPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(70),
-        child: AppBar(
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Colors.deepOrangeAccent,
-                  Colors.deepPurpleAccent,
-                ],
-              ),
-              borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(20),
+    return _isLoading
+        ? CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+          )
+        : Scaffold(
+            appBar: PreferredSize(
+              preferredSize: Size.fromHeight(70),
+              child: AppBar(
+                flexibleSpace: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Colors.deepOrangeAccent,
+                        Colors.deepPurpleAccent,
+                      ],
+                    ),
+                    borderRadius: BorderRadius.vertical(
+                      bottom: Radius.circular(20),
+                    ),
+                  ),
+                ),
+                title: Text(
+                  'Camera',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
+                ),
               ),
             ),
-          ),
-          title: Text(
-            'Camera',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 24,
+            body: Center(
+              child: _imageURL == null
+                  ? FutureBuilder<void>(
+                      future: _initializeControllerFuture,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          return CameraPreview(_controller);
+                        } else {
+                          return const CircularProgressIndicator();
+                        }
+                      },
+                    )
+                  : Container(), // Empty container as image is displayed in the dialog
             ),
-          ),
-        ),
-      ),
-      body: Center(
-        child: _imageURL == null
-            ? FutureBuilder<void>(
-                future: _initializeControllerFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    return CameraPreview(_controller);
-                  } else {
-                    return const CircularProgressIndicator();
-                  }
-                },
-              )
-            : Container(), // Empty container as image is displayed in the dialog
-      ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            heroTag: 'camera',
-            onPressed: _takePicture,
-            tooltip: 'Take Picture',
-            child: Icon(Icons.camera_alt),
-          ),
-          SizedBox(height: 16),
-          FloatingActionButton(
-            heroTag: "gallery",
-            onPressed: _openGallery,
-            tooltip: 'Open Gallery',
-            child: Icon(Icons.photo_library),
-          ),
-        ],
-      ),
-    );
+            floatingActionButton: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                FloatingActionButton(
+                  heroTag: 'camera',
+                  onPressed: _takePicture,
+                  tooltip: 'Take Picture',
+                  child: Icon(Icons.camera_alt),
+                ),
+                SizedBox(height: 16),
+                FloatingActionButton(
+                  heroTag: "gallery",
+                  onPressed: _openGallery,
+                  tooltip: 'Open Gallery',
+                  child: Icon(Icons.photo_library),
+                ),
+              ],
+            ),
+          );
   }
 
   uploadPost() async {
     if (_imageURL != null) {
+      setState(() {
+        _isLoading = true;
+      });
       Map<String, dynamic> postData = {};
       await Storage().uploadImage(File(_imageURL!)).then((value) {
         if (value != 'error') {
@@ -242,8 +251,21 @@ class _CameraPageState extends State<CameraPage> {
       await Database(uid: FirebaseAuth.instance.currentUser!.uid)
           .uploadPostByUser(postData)
           .then((value) {
+        setState(() {
+          _isLoading = false;
+        });
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => Homepg()));
+      }).onError((error, stackTrace) {
+        setState(() {
+          _isLoading = false;
+        });
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("error")));
+      });
+    } else {
+      setState(() {
+        _isLoading = false;
       });
     }
   }
