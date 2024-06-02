@@ -97,6 +97,27 @@ class Database {
     }
   }
 
+  Future removeLikes(String postID) async {
+    try {
+      await postCollection
+          .doc(postID)
+          .collection('likes')
+          .where('likedBy', isEqualTo: uid)
+          .get()
+          .then((value) async {
+        if (value.docs.length != 0) {
+          DocumentReference ref = await postCollection
+              .doc(postID)
+              .collection('likes')
+              .doc(value.docs[0]['likedBy']);
+          ref.delete();
+        }
+      });
+    } catch (e) {
+      return e;
+    }
+  }
+
   Future getNumberOfLikesAndComment(postID) async {
     QuerySnapshot snapshot =
         await postCollection.doc(postID).collection('likes').get();

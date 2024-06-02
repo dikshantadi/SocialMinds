@@ -140,7 +140,9 @@ class _postTemplateState extends State<postTemplate> {
                 liked
                     ? ElevatedButton.icon(
                         label: Text('liked'),
-                        onPressed: () {},
+                        onPressed: () {
+                          removeLike();
+                        },
                         icon: Icon(Icons.thumb_up),
                       )
                     : ElevatedButton.icon(
@@ -202,5 +204,24 @@ class _postTemplateState extends State<postTemplate> {
     } catch (e) {
       print("error when trying to like");
     }
+  }
+
+  removeLike() async {
+    setState(() {
+      liked = false;
+      likesNo = likesNo! - 1;
+    });
+    await Database(uid: FirebaseAuth.instance.currentUser!.uid)
+        .removeLikes(widget.postID)
+        .then((value) {
+      if (value == null) {
+        print("liked deleted");
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(value),
+          backgroundColor: Colors.red,
+        ));
+      }
+    });
   }
 }
