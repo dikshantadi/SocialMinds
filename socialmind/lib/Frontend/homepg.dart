@@ -21,6 +21,7 @@ import 'background.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:socialmind/backend/database.dart';
 import 'package:socialmind/backend/authentication.dart';
+import 'package:socialmind/Frontend/Friend/Notification.dart';
 
 class Homepg extends StatefulWidget {
   const Homepg({
@@ -257,6 +258,8 @@ class _HomepgState extends State<Homepg> {
               title: Text('Notifications'),
               onTap: () {
                 // Implement navigation to settings page here
+                 Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => NotificationPage()));
               },
             ),
             ListTile(
