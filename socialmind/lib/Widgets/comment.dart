@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:socialmind/backend/database.dart';
 import 'package:socialmind/shared_preferences.dart';
+import 'package:socialmind/Frontend/homepg.dart';
 
 class comment extends StatefulWidget {
   final postID;
@@ -23,11 +22,11 @@ class comment extends StatefulWidget {
 }
 
 class _commentState extends State<comment> {
-  @override
   TextEditingController _commentController = TextEditingController();
   String? userName;
   QuerySnapshot? commentSnapshot;
   bool _beingPosted = false;
+  @override
   void initState() {
     getComments();
     super.initState();
@@ -56,6 +55,12 @@ class _commentState extends State<comment> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: BackButton(
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Homepg()));
+          },
+        ),
         title: Text('Comments'),
       ),
       body: Column(

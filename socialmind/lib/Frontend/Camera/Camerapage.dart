@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:camera/camera.dart';
 import 'dart:io';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:socialmind/Frontend/homepg.dart';
 import 'package:socialmind/backend/database.dart';
 import 'package:socialmind/backend/storage.dart';
 
@@ -147,10 +148,7 @@ class _CameraPageState extends State<CameraPage> {
               onPressed: () {
                 // Perform sharing logic here
                 // You can upload the image to Firebase Storage and save the description to Firestore or any other action
-                uploadPost();
-
-                Navigator.of(context)
-                    .popUntil((route) => route.isFirst); // Close all dialogs
+                uploadPost(); // Close all dialogs
               },
               child: Text('Share'),
             ),
@@ -209,12 +207,14 @@ class _CameraPageState extends State<CameraPage> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           FloatingActionButton(
+            heroTag: 'camera',
             onPressed: _takePicture,
             tooltip: 'Take Picture',
             child: Icon(Icons.camera_alt),
           ),
           SizedBox(height: 16),
           FloatingActionButton(
+            heroTag: "gallery",
             onPressed: _openGallery,
             tooltip: 'Open Gallery',
             child: Icon(Icons.photo_library),
@@ -240,7 +240,11 @@ class _CameraPageState extends State<CameraPage> {
         }
       });
       await Database(uid: FirebaseAuth.instance.currentUser!.uid)
-          .uploadPostByUser(postData);
+          .uploadPostByUser(postData)
+          .then((value) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Homepg()));
+      });
     }
   }
 }

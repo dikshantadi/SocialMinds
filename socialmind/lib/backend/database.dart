@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:socialmind/Widgets/comment.dart';
 
 class Database {
   final String? uid;
