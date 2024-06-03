@@ -22,6 +22,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:socialmind/backend/database.dart';
 import 'package:socialmind/backend/authentication.dart';
 import 'package:socialmind/Frontend/Friend/Notification.dart';
+import 'package:socialmind/Frontend/Message/MessagingPage.dart';
 
 class Homepg extends StatefulWidget {
   const Homepg({
@@ -275,7 +276,7 @@ class _HomepgState extends State<Homepg> {
               title: Text('Chat'),
               onTap: () {
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Chat()));
+                    context, MaterialPageRoute(builder: (context) => MessagingPage()));
               },
             ),
             // ListTile(
