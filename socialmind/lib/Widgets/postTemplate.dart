@@ -166,6 +166,7 @@ class _postTemplateState extends State<postTemplate> {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return comment(
+                          type: "Post",
                           postID: widget.postID,
                           postedBy: widget.authorName,
                           imageUrl: widget.imageUrl,

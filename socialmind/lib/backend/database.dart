@@ -65,22 +65,45 @@ class Database {
     }
   }
 
-  Future addCommentOnaPost(
-      String postID, Map<String, dynamic> commentData) async {
+  Future addCommentOnaPost(String postID, Map<String, dynamic> commentData,
+      String collection) async {
     try {
-      await postCollection.doc(postID).collection("Comments").add(commentData);
+      if (collection == 'Post') {
+        await postCollection
+            .doc(postID)
+            .collection("Comments")
+            .add(commentData);
+      } else {
+        await storyCollection
+            .doc(postID)
+            .collection("Comments")
+            .add(commentData);
+      }
     } catch (e) {
       print(e);
     }
   }
 
-  Future getComments(String postID) async {
-    QuerySnapshot snapshot = await postCollection
-        .doc(postID)
-        .collection("Comments")
-        .orderBy('time', descending: true)
-        .get();
-    return snapshot;
+  Future getComments(String postID, String collection) async {
+    try {
+      if (collection == 'Post') {
+        QuerySnapshot snapshot = await postCollection
+            .doc(postID)
+            .collection("Comments")
+            .orderBy('time', descending: true)
+            .get();
+        return snapshot;
+      } else {
+        QuerySnapshot snapshot = await storyCollection
+            .doc(postID)
+            .collection("Comments")
+            .orderBy('time', descending: true)
+            .get();
+        return snapshot;
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future addLikes(String postID, Map<String, dynamic> likeData) async {

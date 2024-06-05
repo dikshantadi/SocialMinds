@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socialmind/Widgets/imageView.dart';
 
 class StoryTemplate extends StatelessWidget {
   final String imageUrl;
@@ -14,8 +15,8 @@ class StoryTemplate extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            height: 80,
-            width: 80,
+            height: 150,
+            width: 150,
             decoration: BoxDecoration(
               shape: BoxShape.rectangle,
               image: DecorationImage(

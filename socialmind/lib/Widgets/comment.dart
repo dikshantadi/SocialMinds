@@ -7,12 +7,14 @@ import 'package:socialmind/Frontend/homepg.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class comment extends StatefulWidget {
+  final String type;
   final postID;
   final postedBy;
   final imageUrl;
   final caption;
   const comment(
       {super.key,
+      required this.type,
       required this.postID,
       required this.postedBy,
       required this.imageUrl,
@@ -42,7 +44,7 @@ class _commentState extends State<comment> {
       }
     });
     await Database(uid: FirebaseAuth.instance.currentUser!.uid)
-        .getComments(widget.postID)
+        .getComments(widget.postID, widget.type)
         .then((value) {
       if (value != null) {
         setState(() {
@@ -62,7 +64,6 @@ class _commentState extends State<comment> {
                 context, MaterialPageRoute(builder: (context) => Homepg()));
           },
         ),
-        title: Text('Comments'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,7 +110,7 @@ class _commentState extends State<comment> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: Text(
-                    widget.caption,
+                    widget.caption ?? '',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.black87,
@@ -123,6 +124,24 @@ class _commentState extends State<comment> {
                   child: Image.network(
                     widget.imageUrl,
                     fit: BoxFit.cover,
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 4.0,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.blue),
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        );
+                      }
+                    },
                     errorBuilder: (context, error, stackTrace) {
                       return Center(
                         child: Icon(
@@ -237,10 +256,11 @@ class _commentState extends State<comment> {
         'time': DateTime.now().millisecondsSinceEpoch,
       };
       await Database(uid: FirebaseAuth.instance.currentUser!.uid)
-          .addCommentOnaPost(widget.postID, commentData)
+          .addCommentOnaPost(widget.postID, commentData, widget.type)
           .then((value) {
         getComments();
       });
+
       setState(() {
         _commentController.clear();
         _beingPosted = false;

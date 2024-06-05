@@ -389,14 +389,27 @@ class _HomepgState extends State<Homepg> {
             stories.length == 0
                 ? Text('No stories')
                 : Container(
-                    height: 150,
+                    height: 200,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: stories.length,
                       itemBuilder: (context, index) {
-                        return StoryTemplate(
-                          imageUrl: stories[index]['imageUrl'],
-                          authorName: stories[index]['authorName'],
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => comment(
+                                        type: 'Story',
+                                        postID: stories[index].id,
+                                        postedBy: stories[index]['authorName'],
+                                        imageUrl: stories[index]['imageUrl'],
+                                        caption: stories[index]['caption'])));
+                          },
+                          child: StoryTemplate(
+                            imageUrl: stories[index]['imageUrl'],
+                            authorName: stories[index]['authorName'],
+                          ),
                         );
                       },
                     )),
@@ -425,6 +438,7 @@ class _HomepgState extends State<Homepg> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => comment(
+                                      type: 'Post',
                                       postID: postSnapshot![index].id,
                                       postedBy: postSnapshot![index]
                                           ['authorName'],
