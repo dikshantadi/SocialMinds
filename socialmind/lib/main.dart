@@ -8,6 +8,7 @@ import 'package:socialmind/Frontend/Login/verifyEmail.dart';
 import 'package:socialmind/Frontend/StartPage.dart';
 import 'package:socialmind/Frontend/homepg.dart';
 import 'package:socialmind/Frontend/test.dart';
+import 'package:socialmind/backend/database.dart';
 import 'Frontend/Login/verifyEmail.dart';
 import 'package:socialmind/firebase_options.dart';
 import 'package:socialmind/shared_preferences.dart';
@@ -44,7 +45,16 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     getLoginStatus();
+    deleteStories();
     super.initState();
+  }
+
+  deleteStories() async {
+    try {
+      await Database().deleteStories();
+    } catch (e) {
+      print(e);
+    }
   }
 
   bool _loggedIn = false;

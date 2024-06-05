@@ -149,8 +149,13 @@ class _CameraPageState extends State<CameraPage> {
               onPressed: () {
                 // Perform sharing logic here
                 // You can upload the image to Firebase Storage and save the description to Firestore or any other action
-                uploadPost();
-                Navigator.pop(context); // Close all dialogs
+                if (type == 'Post') {
+                  uploadPost();
+                  Navigator.pop(context);
+                } else {
+                  uploadStory();
+                  Navigator.pop(context); // Close all dialogs
+                }
               },
               child: Text('Share'),
             ),
@@ -250,6 +255,46 @@ class _CameraPageState extends State<CameraPage> {
       });
       await Database(uid: FirebaseAuth.instance.currentUser!.uid)
           .uploadPostByUser(postData)
+          .then((value) {
+        setState(() {
+          _isLoading = false;
+        });
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Homepg()));
+      }).onError((error, stackTrace) {
+        setState(() {
+          _isLoading = false;
+        });
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("error")));
+      });
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  //function for uploading stories
+  uploadStory() async {
+    if (_imageURL != null) {
+      setState(() {
+        _isLoading = true;
+      });
+      Map<String, dynamic> storyData = {};
+      await Storage().uploadImage(File(_imageURL!)).then((value) {
+        if (value != 'error') {
+          String downloadUrl = value;
+          storyData = {
+            'authorName': widget.userName,
+            'authorID': FirebaseAuth.instance.currentUser!.uid,
+            'time': DateTime.now().millisecondsSinceEpoch,
+            'imageUrl': downloadUrl
+          };
+        }
+      });
+      await Database(uid: FirebaseAuth.instance.currentUser!.uid)
+          .uploadStory(storyData)
           .then((value) {
         setState(() {
           _isLoading = false;

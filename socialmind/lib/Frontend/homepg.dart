@@ -13,6 +13,7 @@ import 'package:socialmind/Frontend/Login/Login.dart';
 import 'package:socialmind/Frontend/test.dart';
 import 'package:socialmind/Widgets/comment.dart';
 import 'package:socialmind/Widgets/postTemplate.dart';
+import 'package:socialmind/Widgets/storyTemplate.dart';
 import '../backend/authentication.dart';
 import '../shared_preferences.dart';
 import 'package:socialmind/Frontend/Stats.dart';
@@ -39,18 +40,30 @@ class _HomepgState extends State<Homepg> {
   Authentication auth = Authentication();
   List? postSnapshot;
   List postInfos = [];
+  List stories = [];
   void initState() {
     getUserData();
+    getStories();
     getPosts();
     super.initState();
   }
 
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   getUserData();
-  //   getPosts();
-  // }
+  getStories() async {
+    try {
+      await Database(uid: FirebaseAuth.instance.currentUser!.uid)
+          .getStories()
+          .then((value) {
+        if (value != null) {
+          setState(() {
+            QuerySnapshot snapshot = value;
+            List story1 = snapshot.docs;
+            story1.sort((a, b) => a['time'].compareTo(b['time']));
+            stories = story1.reversed.toList();
+          });
+        }
+      });
+    } catch (e) {}
+  }
 
   getPosts() async {
     await Database(uid: FirebaseAuth.instance.currentUser!.uid)
@@ -259,8 +272,10 @@ class _HomepgState extends State<Homepg> {
               title: Text('Notifications'),
               onTap: () {
                 // Implement navigation to settings page here
-                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => NotificationPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NotificationPage()));
               },
             ),
             ListTile(
@@ -275,8 +290,8 @@ class _HomepgState extends State<Homepg> {
               leading: Icon(Iconsax.message),
               title: Text('Chat'),
               onTap: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => MessagingPage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MessagingPage()));
               },
             ),
             // ListTile(
@@ -371,39 +386,23 @@ class _HomepgState extends State<Homepg> {
             Container(
               height: 50,
             ),
-            Container(
-              height: 150,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  // yo saab backend bata api tanera milaunu parxa, aile lai yeti hos, ui lai
-                  Container(
-                    width: 120,
-                    color: Colors.red,
-                    margin: EdgeInsets.symmetric(horizontal: 8),
-                  ),
-                  Container(
-                    width: 120,
-                    color: Colors.blue,
-                    margin: EdgeInsets.symmetric(horizontal: 8),
-                  ),
-                  Container(
-                    width: 120,
-                    color: Colors.yellow,
-                    margin: EdgeInsets.symmetric(horizontal: 8),
-                  ),
-                  Container(
-                    width: 120,
-                    color: Colors.green,
-                    margin: EdgeInsets.symmetric(horizontal: 8),
-                  ),
-                ],
-              ),
-            ),
+            stories.length == 0
+                ? CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                  )
+                : Container(
+                    height: 150,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: stories.length,
+                      itemBuilder: (context, index) {
+                        return StoryTemplate(
+                          imageUrl: stories[index]['imageUrl'],
+                          authorName: stories[index]['authorName'],
+                        );
+                      },
+                    )),
             SizedBox(
-              height: 50,
-            ),
-            Container(
               height: 2,
             ),
             postSnapshot == null

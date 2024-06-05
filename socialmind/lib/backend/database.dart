@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:path_provider/path_provider.dart';
 
 class Database {
   final String? uid;
@@ -7,6 +8,8 @@ class Database {
       FirebaseFirestore.instance.collection("Users");
   final CollectionReference postCollection =
       FirebaseFirestore.instance.collection("Posts");
+  final CollectionReference storyCollection =
+      FirebaseFirestore.instance.collection("Story");
 
   Future<void> createUserDocument(String userName, email) async {
     try {
@@ -15,7 +18,8 @@ class Database {
         'email': email,
         'profilePicture': '',
         'friendList': [],
-        'postList': []
+        'postList': [],
+        'storyList': []
       };
       print(userData);
 
@@ -41,15 +45,6 @@ class Database {
     DocumentSnapshot sp = await userCollection.doc(uid).get();
     return sp;
   }
-
-  // Future searchUserByName(String name) async {
-  //   QuerySnapshot snapshot = await userCollection
-  //       .where('userName', isGreaterThanOrEqualTo: name)
-  //       .get();
-  //   return snapshot;
-  // }
-
-  // Future sendFriendRequest(Map<String, dynamic> friendReq) async {}
 
   Future uploadPostByUser(Map<String, dynamic> postData) async {
     DocumentReference document = await postCollection.add(postData);
@@ -146,5 +141,45 @@ class Database {
       };
       return likeAndComment;
     }
+  }
+
+  Future uploadStory(Map<String, dynamic> story) async {
+    try {
+      DocumentReference doc = await storyCollection.add(story);
+      await userCollection.doc(uid).update({
+        'storyList': FieldValue.arrayUnion(['${doc.id}'])
+      });
+    } catch (e) {
+      return e;
+    }
+  }
+
+  Future getStories() async {
+    try {
+      DocumentSnapshot doc = await userCollection.doc(uid).get();
+
+      QuerySnapshot snapshot = await storyCollection
+          .where('authorID', whereIn: doc['friendList'])
+          .get();
+      return snapshot;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future deleteStories() async {
+    try {
+      final dayInMilisecond = 86400000;
+      final storiesToBeDeleted = await storyCollection
+          .where('time',
+              isGreaterThanOrEqualTo:
+                  dayInMilisecond + DateTime.now().microsecondsSinceEpoch)
+          .get();
+      final batch = FirebaseFirestore.instance.batch();
+      for (var doc in storiesToBeDeleted.docs) {
+        batch.delete(doc.reference);
+      }
+      await batch.commit();
+    } catch (e) {}
   }
 }
