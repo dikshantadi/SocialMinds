@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:socialmind/Widgets/imageView.dart';
 
 class StoryTemplate extends StatelessWidget {
   final String imageUrl;
