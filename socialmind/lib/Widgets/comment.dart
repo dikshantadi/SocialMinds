@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:socialmind/backend/database.dart';
 import 'package:socialmind/shared_preferences.dart';
 import 'package:socialmind/Frontend/homepg.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class comment extends StatefulWidget {
   final postID;
@@ -168,7 +169,7 @@ class _commentState extends State<comment> {
               ],
             ),
           ),
-          commentSnapshot == null
+          commentSnapshot == null || commentSnapshot!.docs.length == 0
               ? Text('No comments')
               : _beingPosted
                   ? Center(
@@ -177,18 +178,44 @@ class _commentState extends State<comment> {
                       ),
                     )
                   : Expanded(
-                      child: ListView.builder(
+                      child: ListView.separated(
                         itemCount: commentSnapshot!.docs.length,
+                        separatorBuilder: (context, index) {
+                          return Container(
+                            color: Color.fromARGB(255, 255, 255, 255),
+                            height: 5,
+                            width: double.infinity,
+                          );
+                        },
                         itemBuilder: (context, index) {
+                          final time = commentSnapshot!.docs[index]['time'];
                           return ListTile(
                             leading: CircleAvatar(
                               child: Text(commentSnapshot!.docs[index]
                                   ['commentorName'][0]),
                             ),
                             title: Text(
-                                commentSnapshot!.docs[index]['commentorName']),
-                            subtitle:
+                              commentSnapshot!.docs[index]['commentorName'],
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
                                 Text(commentSnapshot!.docs[index]['comment']),
+                                SizedBox(height: 4),
+                                Text(
+                                  timeago.format(
+                                    DateTime.fromMillisecondsSinceEpoch(time),
+                                  ),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ],
+                            ),
                           );
                         },
                       ),

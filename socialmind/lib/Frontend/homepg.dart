@@ -384,12 +384,10 @@ class _HomepgState extends State<Homepg> {
         child: Column(
           children: [
             Container(
-              height: 50,
+              height: 30,
             ),
             stories.length == 0
-                ? CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-                  )
+                ? Text('No stories')
                 : Container(
                     height: 150,
                     child: ListView.builder(
@@ -409,10 +407,17 @@ class _HomepgState extends State<Homepg> {
                 ? CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
                   )
-                : ListView.builder(
+                : ListView.separated(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: postSnapshot!.length,
+                    separatorBuilder: (context, index) {
+                      return Container(
+                        width: double.infinity,
+                        height: 10,
+                        color: Colors.grey,
+                      );
+                    },
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
@@ -429,10 +434,12 @@ class _HomepgState extends State<Homepg> {
                                           ['caption'])));
                         },
                         child: postTemplate(
+                            authorID: postSnapshot![index]['authorID'],
                             postID: postSnapshot![index].id,
                             authorName: postSnapshot![index]['authorName'],
                             caption: postSnapshot![index]['caption'],
-                            imageUrl: postSnapshot![index]['imageUrl']),
+                            imageUrl: postSnapshot![index]['imageUrl'],
+                            time: postSnapshot![index]['time']),
                       );
                     },
                   ),

@@ -2,18 +2,23 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:socialmind/Widgets/comment.dart';
 import 'package:socialmind/backend/database.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class postTemplate extends StatefulWidget {
   final String postID;
   final String authorName;
   final String imageUrl;
   final String caption;
+  final int time;
+  final String authorID;
   const postTemplate(
       {super.key,
+      required this.authorID,
       required this.postID,
       required this.authorName,
       required this.caption,
-      required this.imageUrl});
+      required this.imageUrl,
+      required this.time});
 
   @override
   State<postTemplate> createState() => _postTemplateState();
@@ -45,7 +50,7 @@ class _postTemplateState extends State<postTemplate> {
 
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      margin: EdgeInsets.symmetric(horizontal: 2, vertical: 0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(5),
@@ -80,6 +85,8 @@ class _postTemplateState extends State<postTemplate> {
                 ),
               ),
             ),
+            subtitle: Text(
+                '${timeago.format(DateTime.fromMillisecondsSinceEpoch(widget.time))}'),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -132,10 +139,9 @@ class _postTemplateState extends State<postTemplate> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                likesNo == null ? Text('0') : Text('${likesNo}'),
                 liked
                     ? ElevatedButton.icon(
-                        label: Text('liked'),
+                        label: Text('liked ${likesNo ?? 0}'),
                         onPressed: () {
                           removeLike();
                         },
@@ -146,7 +152,7 @@ class _postTemplateState extends State<postTemplate> {
                           addLike();
                         },
                         icon: Icon(Icons.thumb_up),
-                        label: Text('Like'),
+                        label: Text('Like ${likesNo ?? 0}'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue, // Background color
                           foregroundColor: Colors.white, // Text color
@@ -155,7 +161,6 @@ class _postTemplateState extends State<postTemplate> {
                           ),
                         ),
                       ),
-                commentNo == null ? Text('0') : Text('${commentNo}'),
                 ElevatedButton.icon(
                   onPressed: () {
                     Navigator.push(context,
@@ -168,7 +173,7 @@ class _postTemplateState extends State<postTemplate> {
                     }));
                   },
                   icon: Icon(Icons.comment),
-                  label: Text('Comment'),
+                  label: Text('${commentNo ?? 0}'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue, // Background color
                     foregroundColor: Colors.white, // Text color
