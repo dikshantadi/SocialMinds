@@ -249,7 +249,8 @@ class _CameraPageState extends State<CameraPage> {
             'authorID': FirebaseAuth.instance.currentUser!.uid,
             'time': DateTime.now().millisecondsSinceEpoch,
             'caption': _descriptionController.text,
-            'imageUrl': downloadUrl
+            'imageUrl': downloadUrl,
+            'sharedList': []
           };
         }
       });

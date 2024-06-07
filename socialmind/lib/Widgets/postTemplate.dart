@@ -282,10 +282,11 @@ class _postTemplateState extends State<postTemplate> {
   }
 
   deletePost() async {
+    await Storage().deleteImage(widget.imageUrl);
     await Database(uid: FirebaseAuth.instance.currentUser!.uid)
         .deletePost(widget.postID)
         .then((value) {});
-    await Storage().deleteImage(widget.imageUrl);
+
     Navigator.push(
         context, MaterialPageRoute(builder: ((context) => Homepg())));
   }

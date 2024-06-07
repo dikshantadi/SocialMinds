@@ -239,6 +239,14 @@ class Database {
 
   Future deletePost(String postID) async {
     try {
+      DocumentSnapshot snap = await postCollection.doc(postID).get();
+      for (int i = 0; i < snap['sharedList'].length; i++) {
+        DocumentReference ref1 =
+            await userCollection.doc(snap['sharedList'][i]);
+        ref1.update({
+          'postList': FieldValue.arrayRemove(['${postID}'])
+        });
+      }
       await postCollection.doc(postID).delete();
       DocumentReference ref = await userCollection.doc(uid);
       ref.update({
@@ -251,6 +259,11 @@ class Database {
 
   Future sharePost(String postID) async {
     try {
+      print(uid);
+      DocumentReference postref = await postCollection.doc(postID);
+      postref.update({
+        'sharedList': FieldValue.arrayUnion(["${uid}"])
+      });
       DocumentReference ref = await userCollection.doc(uid);
       ref.update({
         'postList': FieldValue.arrayUnion(["${postID}"])
