@@ -71,14 +71,12 @@ class _HomepgState extends State<Homepg> {
         .getPosts()
         .then((value) {
       if (value != null) {
+        List postSnapshot1 = value.docs;
+        postSnapshot1.sort(
+          (a, b) => a['time'].compareTo(b['time']),
+        );
         setState(() {
-          List postSnapshot1 = value.docs;
-          postSnapshot1.sort(
-            (a, b) => a['time'].compareTo(b['time']),
-          );
           postSnapshot = postSnapshot1.reversed.toList();
-          print(
-              'this is the snapshot postSnapshot ${postSnapshot![1]['authorID']} ');
         });
       }
     });

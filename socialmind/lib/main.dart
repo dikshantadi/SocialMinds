@@ -65,6 +65,10 @@ class _MyAppState extends State<MyApp> {
           _loggedIn = value;
           print(value);
         });
+      } else {
+        setState(() {
+          _loggedIn = false;
+        });
       }
     });
   }
@@ -73,6 +77,6 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: _loggedIn ? StartPage() : Homepg());
+        home: _loggedIn ? Homepg() : StartPage());
   }
 }
