@@ -1,10 +1,17 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:socialmind/Frontend/Userpage/Userpg.dart';
 
 class StoryTemplate extends StatelessWidget {
   final String imageUrl;
   final String authorName;
+  final String authorID;
 
-  StoryTemplate({required this.imageUrl, required this.authorName});
+  StoryTemplate(
+      {required this.imageUrl,
+      required this.authorName,
+      required this.authorID});
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +21,7 @@ class StoryTemplate extends StatelessWidget {
       child: Column(
         children: [
           Container(
+            margin: EdgeInsets.all(2),
             height: 150,
             width: 150,
             decoration: BoxDecoration(
@@ -25,10 +33,18 @@ class StoryTemplate extends StatelessWidget {
             ),
           ),
           SizedBox(height: 8),
-          Text(
-            authorName,
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-            overflow: TextOverflow.ellipsis,
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Userpg(uid: authorID)));
+            },
+            child: Text(
+              authorName,
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ],
       ),

@@ -63,6 +63,7 @@ class _MyAppState extends State<MyApp> {
       if (value != null) {
         setState(() {
           _loggedIn = value;
+          print(value);
         });
       }
     });

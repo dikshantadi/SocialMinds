@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:socialmind/Frontend/Userpage/Userpg.dart';
+import 'package:socialmind/Frontend/homepg.dart';
 import 'package:socialmind/Widgets/comment.dart';
 import 'package:socialmind/backend/database.dart';
+import 'package:socialmind/backend/storage.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class postTemplate extends StatefulWidget {
@@ -67,12 +70,30 @@ class _postTemplateState extends State<postTemplate> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ListTile(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return comment(
+                    type: "Post",
+                    authorID: widget.authorID,
+                    postID: widget.postID,
+                    postedBy: widget.authorName,
+                    imageUrl: widget.imageUrl,
+                    caption: widget.caption);
+              }));
+            },
             contentPadding: EdgeInsets.all(10),
-            title: Text(
-              widget.authorName,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
+            title: InkWell(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return Userpg(uid: widget.authorID);
+                }));
+              },
+              child: Text(
+                widget.authorName,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
               ),
             ),
             leading: CircleAvatar(
@@ -87,6 +108,38 @@ class _postTemplateState extends State<postTemplate> {
             ),
             subtitle: Text(
                 '${timeago.format(DateTime.fromMillisecondsSinceEpoch(widget.time))}'),
+            trailing: IconButton(
+                icon: Icon(Icons.more_vert),
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          alignment: AlignmentDirectional.bottomCenter,
+                          actions: [
+                            ListTile(
+                              onTap: () {
+                                sharePost();
+                              },
+                              title: Text("Share Post"),
+                              leading: Icon(Icons.share),
+                            ),
+                            FirebaseAuth.instance.currentUser!.uid ==
+                                    widget.authorID
+                                ? ListTile(
+                                    onTap: () {
+                                      deletePost();
+                                    },
+                                    leading: Icon(Icons.delete),
+                                    title: Text(
+                                      'Delete Post',
+                                      style: TextStyle(fontSize: 17),
+                                    ))
+                                : Text(''),
+                          ],
+                        );
+                      });
+                }),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -168,6 +221,7 @@ class _postTemplateState extends State<postTemplate> {
                       return comment(
                           type: "Post",
                           postID: widget.postID,
+                          authorID: widget.authorID,
                           postedBy: widget.authorName,
                           imageUrl: widget.imageUrl,
                           caption: widget.caption);
@@ -225,5 +279,24 @@ class _postTemplateState extends State<postTemplate> {
         ));
       }
     });
+  }
+
+  deletePost() async {
+    await Database(uid: FirebaseAuth.instance.currentUser!.uid)
+        .deletePost(widget.postID)
+        .then((value) {});
+    await Storage().deleteImage(widget.imageUrl);
+    Navigator.push(
+        context, MaterialPageRoute(builder: ((context) => Homepg())));
+  }
+
+  sharePost() async {
+    try {
+      await Database(uid: FirebaseAuth.instance.currentUser!.uid)
+          .sharePost(widget.postID)
+          .then((value) => Navigator.of(context).pop());
+    } catch (e) {
+      print(e);
+    }
   }
 }

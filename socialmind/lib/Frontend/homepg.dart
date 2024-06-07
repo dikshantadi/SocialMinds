@@ -10,6 +10,7 @@ import 'package:socialmind/Frontend/Friend/FindFriendPage.dart';
 import 'package:socialmind/Frontend/Friend/FriendRequestsPage.dart';
 import 'package:socialmind/Frontend/Login/Changepassword.dart';
 import 'package:socialmind/Frontend/Login/Login.dart';
+import 'package:socialmind/Frontend/Userpage/Userpg.dart';
 import 'package:socialmind/Frontend/test.dart';
 import 'package:socialmind/Widgets/comment.dart';
 import 'package:socialmind/Widgets/postTemplate.dart';
@@ -71,9 +72,8 @@ class _HomepgState extends State<Homepg> {
         .then((value) {
       if (value != null) {
         setState(() {
-          QuerySnapshot snapshot = value;
-          List postSnapshot1 = snapshot.docs;
-          postSnapshot1!.sort(
+          List postSnapshot1 = value.docs;
+          postSnapshot1.sort(
             (a, b) => a['time'].compareTo(b['time']),
           );
           postSnapshot = postSnapshot1.reversed.toList();
@@ -257,14 +257,20 @@ class _HomepgState extends State<Homepg> {
               leading: Icon(Iconsax.home),
               title: Text('Home'),
               onTap: () {
-                // Implement navigation to home page here
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Homepg()));
               },
             ),
             ListTile(
               leading: Icon(Iconsax.user),
               title: Text('My Profile'),
               onTap: () {
-                // Implement navigation to settings page here
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Userpg(
+                              uid: FirebaseAuth.instance.currentUser!.uid,
+                            )));
               },
             ),
             ListTile(
@@ -401,12 +407,14 @@ class _HomepgState extends State<Homepg> {
                                 MaterialPageRoute(
                                     builder: (context) => comment(
                                         type: 'Story',
+                                        authorID: stories[index]['authorID'],
                                         postID: stories[index].id,
                                         postedBy: stories[index]['authorName'],
                                         imageUrl: stories[index]['imageUrl'],
                                         caption: stories[index]['caption'])));
                           },
                           child: StoryTemplate(
+                            authorID: stories[index]['authorID'],
                             imageUrl: stories[index]['imageUrl'],
                             authorName: stories[index]['authorName'],
                           ),
@@ -417,46 +425,57 @@ class _HomepgState extends State<Homepg> {
               height: 2,
             ),
             postSnapshot == null
-                ? CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                ? Center(
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                    ),
                   )
-                : ListView.separated(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: postSnapshot!.length,
-                    separatorBuilder: (context, index) {
-                      return Container(
-                        width: double.infinity,
-                        height: 10,
-                        color: Colors.grey,
-                      );
-                    },
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => comment(
-                                      type: 'Post',
-                                      postID: postSnapshot![index].id,
-                                      postedBy: postSnapshot![index]
-                                          ['authorName'],
-                                      imageUrl: postSnapshot![index]
-                                          ['imageUrl'],
-                                      caption: postSnapshot![index]
-                                          ['caption'])));
+                : postSnapshot!.length == 0
+                    ? Center(
+                        child: Text(
+                        "No Post",
+                        style: TextStyle(
+                            fontSize: 39, fontWeight: FontWeight.bold),
+                      ))
+                    : ListView.separated(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: postSnapshot!.length,
+                        separatorBuilder: (context, index) {
+                          return Container(
+                            width: double.infinity,
+                            height: 10,
+                            color: Colors.grey,
+                          );
                         },
-                        child: postTemplate(
-                            authorID: postSnapshot![index]['authorID'],
-                            postID: postSnapshot![index].id,
-                            authorName: postSnapshot![index]['authorName'],
-                            caption: postSnapshot![index]['caption'],
-                            imageUrl: postSnapshot![index]['imageUrl'],
-                            time: postSnapshot![index]['time']),
-                      );
-                    },
-                  ),
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => comment(
+                                          type: 'Post',
+                                          authorID: postSnapshot![index]
+                                              ['authorID'],
+                                          postID: postSnapshot![index].id,
+                                          postedBy: postSnapshot![index]
+                                              ['authorName'],
+                                          imageUrl: postSnapshot![index]
+                                              ['imageUrl'],
+                                          caption: postSnapshot![index]
+                                              ['caption'])));
+                            },
+                            child: postTemplate(
+                                authorID: postSnapshot![index]['authorID'],
+                                postID: postSnapshot![index].id,
+                                authorName: postSnapshot![index]['authorName'],
+                                caption: postSnapshot![index]['caption'],
+                                imageUrl: postSnapshot![index]['imageUrl'],
+                                time: postSnapshot![index]['time']),
+                          );
+                        },
+                      ),
           ],
         ),
       ),

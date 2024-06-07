@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:socialmind/backend/storage.dart';
 
 class Database {
   final String? uid;
@@ -27,6 +29,13 @@ class Database {
     } catch (e) {
       print(e);
     }
+  }
+
+  Future updateAddressandBirthday(Map<String, dynamic> data) async {
+    try {
+      DocumentReference ref = await userCollection.doc(uid);
+      ref.update({'birthDay': data['birthday'], 'address': data['address']});
+    } catch (e) {}
   }
 
   Future deleteUser(String email) async {
@@ -60,6 +69,21 @@ class Database {
       QuerySnapshot snapshot =
           await postCollection.where('authorID', whereIn: friendList).get();
       return snapshot;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future getMyPost() async {
+    try {
+      DocumentSnapshot snapshot = await userCollection.doc(uid).get();
+      List posts = [];
+      for (int i = 0; i < snapshot['postList'].length; i++) {
+        await postCollection.doc(snapshot['postList'][i]).get().then((value) {
+          posts.add(value);
+        });
+      }
+      return posts;
     } catch (e) {
       print(e);
     }
@@ -195,14 +219,44 @@ class Database {
       final dayInMilisecond = 86400000;
       final storiesToBeDeleted = await storyCollection
           .where('time',
-              isGreaterThanOrEqualTo:
-                  dayInMilisecond + DateTime.now().microsecondsSinceEpoch)
+              isLessThanOrEqualTo:
+                  DateTime.now().millisecondsSinceEpoch - dayInMilisecond)
           .get();
       final batch = FirebaseFirestore.instance.batch();
       for (var doc in storiesToBeDeleted.docs) {
         batch.delete(doc.reference);
       }
       await batch.commit();
-    } catch (e) {}
+
+      for (int i = 1; i <= storiesToBeDeleted.docs.length; i++) {
+        String imageUrl = storiesToBeDeleted.docs[i]['imageUrl'];
+        await Storage().deleteImage(imageUrl);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future deletePost(String postID) async {
+    try {
+      await postCollection.doc(postID).delete();
+      DocumentReference ref = await userCollection.doc(uid);
+      ref.update({
+        'postList': FieldValue.arrayRemove(["${postID}"])
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future sharePost(String postID) async {
+    try {
+      DocumentReference ref = await userCollection.doc(uid);
+      ref.update({
+        'postList': FieldValue.arrayUnion(["${postID}"])
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 }

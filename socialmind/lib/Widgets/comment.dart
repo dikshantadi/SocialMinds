@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:socialmind/Frontend/Userpage/Userpg.dart';
 import 'package:socialmind/backend/database.dart';
 import 'package:socialmind/shared_preferences.dart';
 import 'package:socialmind/Frontend/homepg.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class comment extends StatefulWidget {
+  final authorID;
   final String type;
   final postID;
   final postedBy;
@@ -14,6 +16,7 @@ class comment extends StatefulWidget {
   final caption;
   const comment(
       {super.key,
+      required this.authorID,
       required this.type,
       required this.postID,
       required this.postedBy,
@@ -87,11 +90,20 @@ class _commentState extends State<comment> {
               children: [
                 ListTile(
                   contentPadding: EdgeInsets.all(10),
-                  title: Text(
-                    widget.postedBy,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                  title: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  Userpg(uid: widget.authorID)));
+                    },
+                    child: Text(
+                      widget.postedBy,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
                     ),
                   ),
                   leading: CircleAvatar(
@@ -210,8 +222,18 @@ class _commentState extends State<comment> {
                           final time = commentSnapshot!.docs[index]['time'];
                           return ListTile(
                             leading: CircleAvatar(
-                              child: Text(commentSnapshot!.docs[index]
-                                  ['commentorName'][0]),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Userpg(
+                                              uid: commentSnapshot!.docs[index]
+                                                  ['commentorID'])));
+                                },
+                                child: Text(commentSnapshot!.docs[index]
+                                    ['commentorName'][0]),
+                              ),
                             ),
                             title: Text(
                               commentSnapshot!.docs[index]['commentorName'],

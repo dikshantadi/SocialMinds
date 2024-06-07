@@ -20,4 +20,13 @@ class Storage {
     }
     return "error";
   }
+
+  Future deleteImage(imageUrl) async {
+    try {
+      final ref = str.refFromURL(imageUrl);
+      await ref.delete();
+    } catch (e) {
+      print(e);
+    }
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar_with_label/curved_navigation_bar.dart';
 import 'package:iconsax/iconsax.dart';
@@ -21,7 +22,7 @@ class _NavState extends State<Nav> {
     /* Camerapg(
       camera: firstcamera, cameras: [],
     ),*/
-    Userpg(),
+    Userpg(uid: FirebaseAuth.instance.currentUser!.uid),
   ];
   @override
   Widget build(BuildContext context) {
