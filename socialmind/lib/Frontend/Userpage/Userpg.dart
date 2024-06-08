@@ -267,13 +267,20 @@ class _UserpgState extends State<Userpg> {
                       child: Row(
                         children: [
                           TextButton(
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Color.fromARGB(255, 196, 196, 196))),
                               onPressed: () {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => friendList()));
                               },
-                              child: Text('friends')),
+                              child: Text(
+                                'Friends',
+                                style: TextStyle(
+                                    fontSize: 15, color: Colors.black),
+                              )),
                         ],
                       ),
                     ),
