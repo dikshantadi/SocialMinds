@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:socialmind/Frontend/Userpage/Userpg.dart';
 import 'package:socialmind/backend/friend_database_service.dart';
 
 class FindFriendsPage extends StatefulWidget {
@@ -120,6 +121,13 @@ class _FindFriendsPageState extends State<FindFriendsPage> {
                         }
                         String status = snapshot.data ?? 'none';
                         return ListTile(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        Userpg(uid: user.id)));
+                          },
                           title: Text(user['userName']),
                           subtitle: Text(user['email']),
                           trailing: ElevatedButton(

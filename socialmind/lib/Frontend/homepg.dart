@@ -78,6 +78,10 @@ class _HomepgState extends State<Homepg> {
         setState(() {
           postSnapshot = postSnapshot1.reversed.toList();
         });
+      } else {
+        setState(() {
+          postSnapshot = [];
+        });
       }
     });
     // int postLength = postSnapshot!.docs.length;

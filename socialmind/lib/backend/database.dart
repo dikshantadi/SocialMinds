@@ -55,6 +55,21 @@ class Database {
     return sp;
   }
 
+  Future getFriendList() async {
+    try {
+      List friendList = [];
+      DocumentSnapshot snap = await userCollection.doc(uid).get();
+      for (int i = 0; i < snap['friendList'].length; i++) {
+        await userCollection.doc(snap['friendList'][i]).get().then((value) {
+          friendList.add(value);
+        });
+      }
+      return friendList;
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future uploadPostByUser(Map<String, dynamic> postData) async {
     DocumentReference document = await postCollection.add(postData);
     await Database(uid: uid).userCollection.doc(uid).update({

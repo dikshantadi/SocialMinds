@@ -2,11 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:socialmind/Frontend/Friend/friendList.dart';
+import 'package:socialmind/Frontend/Message/MessagingPage.dart';
 import 'package:socialmind/Frontend/homepg.dart';
 import 'package:socialmind/Frontend/nav.dart';
 import 'package:socialmind/Widgets/comment.dart';
 import 'package:socialmind/Widgets/postTemplate.dart';
 import 'package:socialmind/backend/database.dart';
+import 'package:socialmind/backend/friend_database_service.dart';
 
 class Userpg extends StatefulWidget {
   final String uid;
@@ -24,6 +27,7 @@ class _UserpgState extends State<Userpg> {
   TextEditingController addressController = TextEditingController();
   TextEditingController birthdayController = TextEditingController();
   TextEditingController userNameController = TextEditingController();
+  String FriendStatus = 'none';
   @override
   void initState() {
     getPostsAndUserData();
@@ -48,12 +52,25 @@ class _UserpgState extends State<Userpg> {
         user = value.data() as Map<String, dynamic>;
       });
     });
+    await DatabaseService().getFriendshipStatus(widget.uid).then((value) {
+      setState(() {
+        FriendStatus = value;
+        print(value);
+      });
+    });
   }
 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blue,
         title: Text('User Profile'),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Homepg()));
+            },
+            icon: Icon(Icons.arrow_back)),
       ),
       body: user == null
           ? Center(
@@ -69,6 +86,10 @@ class _UserpgState extends State<Userpg> {
                   children: <Widget>[
                     Center(
                       child: CircleAvatar(
+                        child: Icon(
+                          Icons.face,
+                          size: 90,
+                        ),
                         radius: 50,
                       ),
                     ),
@@ -84,6 +105,64 @@ class _UserpgState extends State<Userpg> {
                       user!['email'],
                       style: TextStyle(fontSize: 16, color: Colors.grey),
                     ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    widget.uid == FirebaseAuth.instance.currentUser!.uid
+                        ? SizedBox(
+                            height: 0,
+                          )
+                        : user!['friendList'].contains(
+                                FirebaseAuth.instance.currentUser!.uid)
+                            ? ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.blue)),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              MessagingPage()));
+                                },
+                                child: Text(
+                                  'Send Message',
+                                  style: TextStyle(color: Colors.white),
+                                ))
+                            : FriendStatus == 'none'
+                                ? ElevatedButton(
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                Colors.blue)),
+                                    onPressed: () async {
+                                      await DatabaseService()
+                                          .sendFriendRequest(widget.uid);
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Userpg(uid: widget.uid)));
+                                    },
+                                    child: Text(
+                                      'Add Friend',
+                                      style: TextStyle(color: Colors.white),
+                                    ))
+                                : FriendStatus == 'pending'
+                                    ? ElevatedButton(
+                                        style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    Colors.blue)),
+                                        onPressed: () {},
+                                        child: Text(
+                                          'Request Pending',
+                                          style: TextStyle(color: Colors.white),
+                                        ))
+                                    : SizedBox(
+                                        height: 0,
+                                      ),
                     SizedBox(height: 20),
                     // ListTile(
                     //   leading: Icon(Icons.phone),
@@ -187,8 +266,14 @@ class _UserpgState extends State<Userpg> {
                     Container(
                       child: Row(
                         children: [
-                          TextButton(onPressed: () {}, child: Text('friends')),
-                          TextButton(onPressed: () {}, child: Text('Post'))
+                          TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => friendList()));
+                              },
+                              child: Text('friends')),
                         ],
                       ),
                     ),

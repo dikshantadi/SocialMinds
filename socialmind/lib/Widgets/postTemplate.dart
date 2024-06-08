@@ -117,6 +117,16 @@ class _postTemplateState extends State<postTemplate> {
                         return AlertDialog(
                           alignment: AlignmentDirectional.bottomCenter,
                           actions: [
+                            // FirebaseAuth.instance.currentUser!.uid ==
+                            //         widget.authorID
+                            //     ? ListTile(
+                            //         onTap: () {},
+                            //         title: Text('edit'),
+                            //         leading: Icon(Icons.edit),
+                            //       )
+                            //     : SizedBox(
+                            //         height: 0,
+                            //       ),
                             ListTile(
                               onTap: () {
                                 sharePost();
@@ -135,7 +145,9 @@ class _postTemplateState extends State<postTemplate> {
                                       'Delete Post',
                                       style: TextStyle(fontSize: 17),
                                     ))
-                                : Text(''),
+                                : SizedBox(
+                                    height: 0,
+                                  ),
                           ],
                         );
                       });
@@ -152,12 +164,12 @@ class _postTemplateState extends State<postTemplate> {
             ),
           ),
           Container(
-            height: 200, // Set a fixed height for the placeholder
+            height: 300, // Set a fixed height for the placeholder
             width: double.infinity, // Make the placeholder take the full width
             color: Colors.grey[200], // Light grey color for the placeholder
             child: Image.network(
               widget.imageUrl,
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
               loadingBuilder: (BuildContext context, Widget child,
                   ImageChunkEvent? loadingProgress) {
                 if (loadingProgress == null) {
