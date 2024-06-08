@@ -68,24 +68,24 @@ class _commentState extends State<comment> {
           },
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(5),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: Offset(0, 3), // changes position of shadow
-                ),
-              ],
-            ),
-            child: SingleChildScrollView(
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -169,106 +169,107 @@ class _commentState extends State<comment> {
                 ],
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _commentController,
-                    decoration: InputDecoration(
-                      labelText: 'Write a comment...',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              alignment: Alignment.bottomCenter,
+              child: TextField(
+                onSubmitted: (value) {
+                  postComment();
+                },
+                controller: _commentController,
+                decoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(color: Colors.green)),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue),
+                      borderRadius: BorderRadius.circular(15)),
+                  filled: true,
+                  fillColor: const Color.fromARGB(255, 235, 235, 235),
+                  hintText: 'Write your comment',
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.all(16.0),
+                  suffixIcon: IconButton(
+                    color: Theme.of(context).primaryColor,
+                    onPressed: () {
+                      postComment();
+                    },
+                    icon: const Icon(Icons.send),
                   ),
                 ),
-                SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    postComment();
-                  },
-                  child: Text('Post'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue, // Background color
-                    foregroundColor: Colors.white, // Text color
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-          commentSnapshot == null || commentSnapshot!.docs.length == 0
-              ? Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'No comments',
-                  ),
-                )
-              : _beingPosted
-                  ? Center(
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-                      ),
-                    )
-                  : Expanded(
-                      child: ListView.separated(
-                        itemCount: commentSnapshot!.docs.length,
-                        separatorBuilder: (context, index) {
-                          return Container(
-                            color: Color.fromARGB(255, 255, 255, 255),
-                            height: 5,
-                            width: double.infinity,
-                          );
-                        },
-                        itemBuilder: (context, index) {
-                          final time = commentSnapshot!.docs[index]['time'];
-                          return ListTile(
-                            leading: CircleAvatar(
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Userpg(
-                                              uid: commentSnapshot!.docs[index]
-                                                  ['commentorID'])));
-                                },
-                                child: Text(commentSnapshot!.docs[index]
-                                    ['commentorName'][0]),
-                              ),
-                            ),
-                            title: Text(
-                              commentSnapshot!.docs[index]['commentorName'],
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(commentSnapshot!.docs[index]['comment']),
-                                SizedBox(height: 4),
-                                Text(
-                                  timeago.format(
-                                    DateTime.fromMillisecondsSinceEpoch(time),
-                                  ),
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
+            commentSnapshot == null || commentSnapshot!.docs.length == 0
+                ? Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'No comments',
                     ),
-        ],
+                  )
+                : _beingPosted
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.blue),
+                        ),
+                      )
+                    : Expanded(
+                        child: ListView.separated(
+                          itemCount: commentSnapshot!.docs.length,
+                          separatorBuilder: (context, index) {
+                            return Container(
+                              color: Color.fromARGB(255, 255, 255, 255),
+                              height: 5,
+                              width: double.infinity,
+                            );
+                          },
+                          itemBuilder: (context, index) {
+                            final time = commentSnapshot!.docs[index]['time'];
+                            return ListTile(
+                              leading: CircleAvatar(
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Userpg(
+                                                uid:
+                                                    commentSnapshot!.docs[index]
+                                                        ['commentorID'])));
+                                  },
+                                  child: Text(commentSnapshot!.docs[index]
+                                      ['commentorName'][0]),
+                                ),
+                              ),
+                              title: Text(
+                                commentSnapshot!.docs[index]['commentorName'],
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(commentSnapshot!.docs[index]['comment']),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    timeago.format(
+                                      DateTime.fromMillisecondsSinceEpoch(time),
+                                    ),
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+          ],
+        ),
       ),
     );
   }
