@@ -10,6 +10,7 @@ import 'package:socialmind/Frontend/Friend/FindFriendPage.dart';
 import 'package:socialmind/Frontend/Friend/FriendRequestsPage.dart';
 import 'package:socialmind/Frontend/Login/Changepassword.dart';
 import 'package:socialmind/Frontend/Login/Login.dart';
+import 'package:socialmind/Frontend/Settings/settings.dart';
 import 'package:socialmind/Frontend/Userpage/Userpg.dart';
 import 'package:socialmind/Frontend/test.dart';
 import 'package:socialmind/Widgets/comment.dart';
@@ -369,6 +370,8 @@ class _HomepgState extends State<Homepg> {
               title: Text('Settings'),
               onTap: () {
                 // Implement navigation to settings page here
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SettingsPage()));
               },
             ),
             ListTile(
