@@ -136,7 +136,7 @@ class _UserpgState extends State<Userpg> {
                                 style: ButtonStyle(
                                     backgroundColor:
                                         MaterialStateProperty.all<Color>(
-                                            Colors.blue)),
+                                            Color.fromARGB(255, 150, 95, 238))),
                                 onPressed: () {
                                   Navigator.push(
                                       context,
@@ -287,7 +287,7 @@ class _UserpgState extends State<Userpg> {
                           TextButton(
                               style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
-                                      Color.fromARGB(255, 196, 196, 196))),
+                                      Color.fromARGB(255, 232, 109, 48))),
                               onPressed: () {
                                 Navigator.push(
                                     context,
@@ -312,7 +312,7 @@ class _UserpgState extends State<Userpg> {
                               fontSize: 25, fontWeight: FontWeight.bold),
                         ),
                       ),
-                      decoration: BoxDecoration(color: Colors.grey),
+                      // decoration: BoxDecoration(color: const Color.fromARGB(255, 243, 240, 240)),
                     ),
                     SizedBox(
                       height: 10,
