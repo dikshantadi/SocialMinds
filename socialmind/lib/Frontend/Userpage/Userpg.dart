@@ -62,8 +62,26 @@ class _UserpgState extends State<Userpg> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
+      // appBar: AppBar(
+      //   backgroundColor: Colors.blue,
+      appBar: PreferredSize(
+              preferredSize: Size.fromHeight(70),
+              child: AppBar(
+                flexibleSpace: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Colors.deepOrangeAccent,
+                        Colors.deepPurpleAccent,
+                      ],
+                    ),
+                    borderRadius: BorderRadius.vertical(
+                      bottom: Radius.circular(20),
+                    ),
+                  ),
+                ),
         title: Text('User Profile'),
         leading: IconButton(
             onPressed: () {
@@ -71,7 +89,7 @@ class _UserpgState extends State<Userpg> {
                   context, MaterialPageRoute(builder: (context) => Homepg()));
             },
             icon: Icon(Icons.arrow_back)),
-      ),
+      ),),
       body: user == null
           ? Center(
               child: CircularProgressIndicator(
@@ -118,7 +136,7 @@ class _UserpgState extends State<Userpg> {
                                 style: ButtonStyle(
                                     backgroundColor:
                                         MaterialStateProperty.all<Color>(
-                                            Colors.blue)),
+                                            Color.fromARGB(255, 150, 95, 238))),
                                 onPressed: () {
                                   Navigator.push(
                                       context,
@@ -269,7 +287,7 @@ class _UserpgState extends State<Userpg> {
                           TextButton(
                               style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
-                                      Color.fromARGB(255, 196, 196, 196))),
+                                      Color.fromARGB(255, 232, 109, 48))),
                               onPressed: () {
                                 Navigator.push(
                                     context,
@@ -295,7 +313,7 @@ class _UserpgState extends State<Userpg> {
                               fontSize: 25, fontWeight: FontWeight.bold),
                         ),
                       ),
-                      decoration: BoxDecoration(color: Colors.grey),
+                      // decoration: BoxDecoration(color: const Color.fromARGB(255, 243, 240, 240)),
                     ),
                     SizedBox(
                       height: 10,

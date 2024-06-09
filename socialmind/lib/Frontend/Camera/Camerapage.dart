@@ -78,7 +78,9 @@ class _CameraPageState extends State<CameraPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Options'),
-          content: Column(
+          // content: Column(
+          content: SingleChildScrollView(
+            child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               if (_imageURL != null) ...[
@@ -110,7 +112,7 @@ class _CameraPageState extends State<CameraPage> {
                 ),
               ],
             ],
-          ),
+          ),),
           actions: [
             TextButton(
               onPressed: () {
