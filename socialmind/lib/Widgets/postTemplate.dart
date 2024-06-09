@@ -297,7 +297,10 @@ class _postTemplateState extends State<postTemplate> {
     await Storage().deleteImage(widget.imageUrl);
     await Database(uid: FirebaseAuth.instance.currentUser!.uid)
         .deletePost(widget.postID)
-        .then((value) {});
+        .then((value) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.green, content: Text('Post Deleted')));
+    });
 
     Navigator.push(
         context, MaterialPageRoute(builder: ((context) => Homepg())));
@@ -307,8 +310,15 @@ class _postTemplateState extends State<postTemplate> {
     try {
       await Database(uid: FirebaseAuth.instance.currentUser!.uid)
           .sharePost(widget.postID)
-          .then((value) => Navigator.of(context).pop());
+          .then((value) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.green,
+            content: Text('Post has been shared')));
+      });
     } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(backgroundColor: Colors.red, content: Text('Error')));
       print(e);
     }
   }
