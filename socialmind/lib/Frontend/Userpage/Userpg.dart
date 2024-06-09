@@ -274,7 +274,8 @@ class _UserpgState extends State<Userpg> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => friendList()));
+                                        builder: (context) =>
+                                            friendList(uid: widget.uid)));
                               },
                               child: Text(
                                 'Friends',

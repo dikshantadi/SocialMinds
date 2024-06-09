@@ -4,7 +4,8 @@ import 'package:socialmind/Frontend/Userpage/Userpg.dart';
 import 'package:socialmind/backend/database.dart';
 
 class friendList extends StatefulWidget {
-  const friendList({super.key});
+  final String uid;
+  const friendList({super.key, required this.uid});
 
   @override
   State<friendList> createState() => _friendListState();
@@ -20,9 +21,7 @@ class _friendListState extends State<friendList> {
   List? FriendList;
   getFriendList() async {
     try {
-      await Database(uid: FirebaseAuth.instance.currentUser!.uid)
-          .getFriendList()
-          .then((value) {
+      await Database(uid: widget.uid).getFriendList().then((value) {
         if (value != null) {
           setState(() {
             FriendList = value;
