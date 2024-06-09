@@ -62,8 +62,26 @@ class _UserpgState extends State<Userpg> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
+      // appBar: AppBar(
+      //   backgroundColor: Colors.blue,
+      appBar: PreferredSize(
+              preferredSize: Size.fromHeight(70),
+              child: AppBar(
+                flexibleSpace: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Colors.deepOrangeAccent,
+                        Colors.deepPurpleAccent,
+                      ],
+                    ),
+                    borderRadius: BorderRadius.vertical(
+                      bottom: Radius.circular(20),
+                    ),
+                  ),
+                ),
         title: Text('User Profile'),
         leading: IconButton(
             onPressed: () {
@@ -71,7 +89,7 @@ class _UserpgState extends State<Userpg> {
                   context, MaterialPageRoute(builder: (context) => Homepg()));
             },
             icon: Icon(Icons.arrow_back)),
-      ),
+      ),),
       body: user == null
           ? Center(
               child: CircularProgressIndicator(
