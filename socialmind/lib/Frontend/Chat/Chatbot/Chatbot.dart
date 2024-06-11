@@ -19,7 +19,7 @@ class _ChatbotpgState extends State<Chatbotpg> {
       _messages.add({"sender": "User", "text": message});
     });
     final response = await http.post(
-      Uri.parse('http://192.168.1.100:5000/chatbot'),
+      Uri.parse('http://192.168.1.103:5000/chatbot'),
       headers: {"Content-Type": "application/json"},
       body: json.encode({"message": message}),
     );
