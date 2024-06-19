@@ -164,9 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
+                              onPressed: () {},
                               child: Icon(Icons.arrow_back),
                             ),
                             TextButton(
