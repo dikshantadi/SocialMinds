@@ -203,7 +203,12 @@ class _HomepgState extends State<Homepg> {
                 size: 30,
                 color: Colors.black,
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NotificationPage()));
+              },
             ),
             IconButton(
               icon: Icon(
@@ -211,7 +216,10 @@ class _HomepgState extends State<Homepg> {
                 size: 30,
                 color: Colors.black,
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => FindFriendsPage()));
+              },
             ),
           ],
         ),
