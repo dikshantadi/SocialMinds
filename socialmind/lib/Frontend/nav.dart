@@ -27,45 +27,37 @@ class _NavState extends State<Nav> {
   @override
   Widget build(BuildContext context) {
     return CurvedNavigationBar(
-        backgroundColor: Colors.deepPurpleAccent,
-        color: Colors.deepPurpleAccent,
-        buttonBackgroundColor: Colors.white,
-        items: [
-          CurvedNavigationBarItem(
-            icon: Icon(
-              Iconsax.home,
-              size: 30,
-              color: Colors.black,
-            ),
-            label: "Home",
+      backgroundColor: Colors.deepPurpleAccent,
+      color: Colors.deepPurpleAccent,
+      buttonBackgroundColor: Colors.white,
+      items: [
+        CurvedNavigationBarItem(
+          icon: Icon(
+            Iconsax.home,
+            size: 30,
+            color: Colors.black,
           ),
-          CurvedNavigationBarItem(
-            icon: Icon(
-              Iconsax.message,
-              size: 30,
-              color: Colors.black,
-            ),
-            label: "Chat",
+          label: "Home",
+        ),
+        CurvedNavigationBarItem(
+          icon: Icon(
+            Iconsax.message,
+            size: 30,
+            color: Colors.black,
           ),
-          CurvedNavigationBarItem(
-            icon: Icon(
-              Iconsax.camera,
-              size: 30,
-              color: Colors.black,
-            ),
-            label: "Camera",
+          label: "Chat",
+        ),
+        CurvedNavigationBarItem(
+          icon: Icon(
+            Iconsax.user,
+            size: 30,
+            color: Colors.black,
           ),
-          CurvedNavigationBarItem(
-            icon: Icon(
-              Iconsax.user,
-              size: 30,
-              color: Colors.black,
-            ),
-            label: "User",
-          ),
-        ],
-        onTap: (index) {
-          /* if (index == 0) {
+          label: "User",
+        ),
+      ],
+      onTap: (index) {
+        if (index == 0) {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => Homepg()));
         } else if (index == 1) {
@@ -73,14 +65,15 @@ class _NavState extends State<Nav> {
               context, MaterialPageRoute(builder: (context) => Chat()));
         } else if (index == 2) {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Camera()));
-        } else if (index == 3) {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Userpg()));
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Userpg(
+                        uid: 'FirebaseAuth.instance.currentUser!.uid',
+                      )));
         } else {
           print("You noob");
         }
-      }, */
-        });
+      },
+    );
   }
 }
