@@ -14,7 +14,7 @@ nltk.download('wordnet')
 
 lemmatizer = WordNetLemmatizer()
 
-intents = json.loads(open(r'socialmind/Chatbot code/intent.json').read()) #Dont change this, arko train garyo bhane change garnu parxa.
+intents = json.loads(open(r'socialmind/Chatbot\ code/intent.json').read()) #Dont change this, arko train garyo bhane change garnu parxa.
 
 
 words = pickle.load(open('socialmind/Chatbot code/words.pkl', 'rb'))
@@ -71,7 +71,7 @@ def chatbot_response():
     return jsonify({"response": res})
 
 if __name__ == "__main__":
-    app.run(host="192.168.1.100", port=5000, debug=True)
+    app.run(host="192.168.1.102", port=5000, debug=True)
 
 #while True:
  #   message = input("")

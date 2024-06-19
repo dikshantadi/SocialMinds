@@ -37,29 +37,30 @@ class _friendListState extends State<friendList> {
     return Scaffold(
       // appBar: AppBar(
       appBar: PreferredSize(
-              preferredSize: Size.fromHeight(70),
-              child: AppBar(
-                flexibleSpace: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Colors.deepOrangeAccent,
-                        Colors.deepPurpleAccent,
-                      ],
-                    ),
-                    borderRadius: BorderRadius.vertical(
-                      bottom: Radius.circular(20),
-                    ),
-                  ),
-                ),
-        // backgroundColor: Colors.blue,
-        title: Text(
-          'Friends',
-          style: TextStyle(fontSize: 20),
+        preferredSize: Size.fromHeight(70),
+        child: AppBar(
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.deepOrangeAccent,
+                  Colors.deepPurpleAccent,
+                ],
+              ),
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(20),
+              ),
+            ),
+          ),
+          // backgroundColor: Colors.blue,
+          title: Text(
+            'Friends',
+            style: TextStyle(fontSize: 20),
+          ),
         ),
-      ),),
+      ),
       body: Container(
           margin: EdgeInsets.symmetric(vertical: 10),
           child: FriendList == null

@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:socialmind/Frontend/homepg.dart';
+import 'package:socialmind/Frontend/landingPage.dart';
 import 'package:socialmind/Widgets/Custom_scaffold.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:iconsax/iconsax.dart';
@@ -279,8 +280,8 @@ class _LoginPageState extends State<LoginPage> {
               }
             },
           );
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Homepg()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => landingPage(index: 0)));
         } else {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(value),
