@@ -12,6 +12,7 @@ import 'package:socialmind/backend/database.dart';
 import 'Frontend/Login/verifyEmail.dart';
 import 'package:socialmind/firebase_options.dart';
 import 'package:socialmind/shared_preferences.dart';
+import 'package:socialmind/Frontend/landingPage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -77,6 +78,10 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: _loggedIn ? Homepg() : StartPage());
+        home: _loggedIn
+            ? landingPage(
+                index: 0,
+              )
+            : StartPage());
   }
 }

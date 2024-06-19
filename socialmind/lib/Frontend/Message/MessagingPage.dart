@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:socialmind/Frontend/Message/ChatPage.dart';
+import 'package:socialmind/Frontend/landingPage.dart';
+import 'package:socialmind/Frontend/nav.dart';
 
 class MessagingPage extends StatefulWidget {
   @override
@@ -26,7 +28,7 @@ class _MessagingPageState extends State<MessagingPage> {
           .collection('friendships')
           .where('user1', isEqualTo: currentUser.uid)
           .get();
-      
+
       QuerySnapshot friendsSnapshot2 = await FirebaseFirestore.instance
           .collection('friendships')
           .where('user2', isEqualTo: currentUser.uid)
@@ -60,6 +62,14 @@ class _MessagingPageState extends State<MessagingPage> {
               ),
             ),
           ),
+          leading: IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => landingPage(index: 0)));
+              },
+              icon: Icon(Icons.arrow_back)),
           title: Text(
             'Messages',
             style: TextStyle(
@@ -77,24 +87,31 @@ class _MessagingPageState extends State<MessagingPage> {
                   itemCount: _friends.length,
                   itemBuilder: (context, index) {
                     var friend = _friends[index];
-                    var friendId = friend['user1'] == FirebaseAuth.instance.currentUser!.uid
+                    var friendId = friend['user1'] ==
+                            FirebaseAuth.instance.currentUser!.uid
                         ? friend['user2']
                         : friend['user1'];
                     return FutureBuilder<DocumentSnapshot>(
-                      future: FirebaseFirestore.instance.collection('Users').doc(friendId).get(),
+                      future: FirebaseFirestore.instance
+                          .collection('Users')
+                          .doc(friendId)
+                          .get(),
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
                           return Text('Error: ${snapshot.error}');
                         }
                         if (snapshot.connectionState == ConnectionState.done) {
-                          var data = snapshot.data!.data() as Map<String, dynamic>;
+                          var data =
+                              snapshot.data!.data() as Map<String, dynamic>;
                           return ListTile(
                             title: Text(data['userName']),
                             subtitle: Text(data['email']),
                             onTap: () => Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ChatPage(friendId: friendId, friendName: data['userName']),
+                                builder: (context) => ChatPage(
+                                    friendId: friendId,
+                                    friendName: data['userName']),
                               ),
                             ),
                           );

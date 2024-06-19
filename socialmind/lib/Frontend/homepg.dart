@@ -1,28 +1,23 @@
-import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:socialmind/Frontend/Camera/Camerapage.dart';
 import 'package:socialmind/Frontend/Chat/Chatbot/Chatbot.dart';
-import 'package:socialmind/Frontend/Chat/Chatpage.dart';
 import 'package:socialmind/Frontend/Friend/FindFriendPage.dart';
 import 'package:socialmind/Frontend/Friend/FriendRequestsPage.dart';
 import 'package:socialmind/Frontend/Login/Changepassword.dart';
 import 'package:socialmind/Frontend/Login/Login.dart';
 import 'package:socialmind/Frontend/Userpage/Userpg.dart';
-import 'package:socialmind/Frontend/test.dart';
+import 'package:socialmind/Frontend/landingPage.dart';
 import 'package:socialmind/Widgets/comment.dart';
 import 'package:socialmind/Widgets/postTemplate.dart';
 import 'package:socialmind/Widgets/storyTemplate.dart';
 import '../backend/authentication.dart';
 import '../shared_preferences.dart';
 import 'package:socialmind/Frontend/Stats.dart';
-import 'nav.dart';
-import 'background.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:socialmind/backend/database.dart';
-import 'package:socialmind/backend/authentication.dart';
 import 'package:socialmind/Frontend/Friend/Notification.dart';
 import 'package:socialmind/Frontend/Message/MessagingPage.dart';
 
@@ -159,7 +154,9 @@ class _HomepgState extends State<Homepg> {
 
     return Scaffold(
       key: _scaffoldKey,
-      bottomNavigationBar: Nav(),
+      // bottomNavigationBar: Nav(
+      //   index: 0,
+      // ),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(60),
         child: AppBar(
@@ -259,8 +256,12 @@ class _HomepgState extends State<Homepg> {
               leading: Icon(Iconsax.home),
               title: Text('Home'),
               onTap: () {
+                // Navigator.push(
+                //     context, MaterialPageRoute(builder: (context) => Homepg()));
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Homepg()));
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => landingPage(index: 0)));
               },
             ),
             ListTile(
@@ -314,12 +315,8 @@ class _HomepgState extends State<Homepg> {
               leading: Icon(Iconsax.camera),
               title: Text('Camera'),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CameraPage(
-                              userName: userName!,
-                            )));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => CameraPage()));
               },
             ),
             ListTile(

@@ -8,6 +8,7 @@ import 'package:lottie/lottie.dart';
 import 'package:socialmind/Frontend/Login/Login.dart';
 import 'package:socialmind/Frontend/Login/verifyEmail.dart';
 import 'package:socialmind/Frontend/homepg.dart';
+import 'package:socialmind/Frontend/landingPage.dart';
 import 'package:socialmind/Widgets/Custom_scaffold.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:iconsax/iconsax.dart';
@@ -321,8 +322,8 @@ class _SignupState extends State<Signup> {
           //     MaterialPageRoute(
           //         builder: (context) =>
           //             verifyEmail(email: email!, password: password!)));\
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Homepg()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => landingPage(index: 0)));
         } else {
           setState(() {
             _isLoading = false;

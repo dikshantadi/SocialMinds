@@ -1,11 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:socialmind/Frontend/Friend/friendList.dart';
 import 'package:socialmind/Frontend/Message/MessagingPage.dart';
-import 'package:socialmind/Frontend/homepg.dart';
-import 'package:socialmind/Frontend/nav.dart';
+import 'package:socialmind/Frontend/landingPage.dart';
 import 'package:socialmind/Widgets/comment.dart';
 import 'package:socialmind/Widgets/postTemplate.dart';
 import 'package:socialmind/backend/database.dart';
@@ -65,31 +63,34 @@ class _UserpgState extends State<Userpg> {
       // appBar: AppBar(
       //   backgroundColor: Colors.blue,
       appBar: PreferredSize(
-              preferredSize: Size.fromHeight(70),
-              child: AppBar(
-                flexibleSpace: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Colors.deepOrangeAccent,
-                        Colors.deepPurpleAccent,
-                      ],
-                    ),
-                    borderRadius: BorderRadius.vertical(
-                      bottom: Radius.circular(20),
-                    ),
-                  ),
-                ),
-        title: Text('User Profile'),
-        leading: IconButton(
-            onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Homepg()));
-            },
-            icon: Icon(Icons.arrow_back)),
-      ),),
+        preferredSize: Size.fromHeight(70),
+        child: AppBar(
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.deepOrangeAccent,
+                  Colors.deepPurpleAccent,
+                ],
+              ),
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(20),
+              ),
+            ),
+          ),
+          title: Text('User Profile'),
+          leading: IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => landingPage(index: 0)));
+              },
+              icon: Icon(Icons.arrow_back)),
+        ),
+      ),
       body: user == null
           ? Center(
               child: CircularProgressIndicator(

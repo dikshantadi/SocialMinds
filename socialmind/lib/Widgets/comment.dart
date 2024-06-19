@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:socialmind/Frontend/Userpage/Userpg.dart';
+import 'package:socialmind/Frontend/landingPage.dart';
 import 'package:socialmind/backend/database.dart';
 import 'package:socialmind/shared_preferences.dart';
 import 'package:socialmind/Frontend/homepg.dart';
@@ -63,8 +64,8 @@ class _commentState extends State<comment> {
       appBar: AppBar(
         leading: BackButton(
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Homepg()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => landingPage(index: 0)));
           },
         ),
       ),

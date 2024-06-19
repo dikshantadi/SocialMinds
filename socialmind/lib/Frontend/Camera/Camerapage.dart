@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -5,17 +6,18 @@ import 'package:camera/camera.dart';
 import 'dart:io';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:socialmind/Frontend/homepg.dart';
+import 'package:socialmind/Frontend/landingPage.dart';
 import 'package:socialmind/backend/database.dart';
 import 'package:socialmind/backend/storage.dart';
 
 class CameraPage extends StatefulWidget {
-  final String userName;
-  const CameraPage({super.key, required this.userName});
+  const CameraPage({super.key});
   @override
   _CameraPageState createState() => _CameraPageState();
 }
 
 class _CameraPageState extends State<CameraPage> {
+  String? userName;
   bool _isLoading = false;
   late List<CameraDescription> cameras;
   late CameraController _controller;
@@ -27,9 +29,25 @@ class _CameraPageState extends State<CameraPage> {
   @override
   void initState() {
     super.initState();
-
+    getUserData();
     // Initialize camera controller
     _initializeControllerFuture = _initializeCamera();
+  }
+
+  getUserData() async {
+    setState(() {
+      _isLoading = true;
+    });
+    await Database(uid: FirebaseAuth.instance.currentUser!.uid)
+        .getUserData()
+        .then((value) {
+      DocumentSnapshot snapshot = value;
+      setState(() {
+        userName = snapshot['userName'];
+        print(userName);
+        _isLoading = false;
+      });
+    });
   }
 
   Future<void> _initializeCamera() async {
@@ -81,38 +99,39 @@ class _CameraPageState extends State<CameraPage> {
           // content: Column(
           content: SingleChildScrollView(
             child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (_imageURL != null) ...[
-                kIsWeb
-                    ? Image.network(_imageURL!, width: 200, height: 200)
-                    : Image.file(File(_imageURL!), width: 200, height: 200),
-                SizedBox(height: 16),
-                TextField(
-                  controller: _descriptionController,
-                  decoration: InputDecoration(
-                    labelText: 'Description',
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (_imageURL != null) ...[
+                  kIsWeb
+                      ? Image.network(_imageURL!, width: 200, height: 200)
+                      : Image.file(File(_imageURL!), width: 200, height: 200),
+                  SizedBox(height: 16),
+                  TextField(
+                    controller: _descriptionController,
+                    decoration: InputDecoration(
+                      labelText: 'Description',
+                    ),
                   ),
-                ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context); // Close the dialog
-                    _sharePhoto("Story");
-                  },
-                  child: Text('Share as Story'),
-                ),
-                SizedBox(height: 8),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context); // Close the dialog
-                    _sharePhoto("Post");
-                  },
-                  child: Text('Share as Post'),
-                ),
+                  SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context); // Close the dialog
+                      _sharePhoto("Story");
+                    },
+                    child: Text('Share as Story'),
+                  ),
+                  SizedBox(height: 8),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context); // Close the dialog
+                      _sharePhoto("Post");
+                    },
+                    child: Text('Share as Post'),
+                  ),
+                ],
               ],
-            ],
-          ),),
+            ),
+          ),
           actions: [
             TextButton(
               onPressed: () {
@@ -247,7 +266,7 @@ class _CameraPageState extends State<CameraPage> {
         if (value != 'error') {
           String downloadUrl = value;
           postData = {
-            'authorName': widget.userName,
+            'authorName': userName,
             'authorID': FirebaseAuth.instance.currentUser!.uid,
             'time': DateTime.now().millisecondsSinceEpoch,
             'caption': _descriptionController.text,
@@ -262,8 +281,8 @@ class _CameraPageState extends State<CameraPage> {
         setState(() {
           _isLoading = false;
         });
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Homepg()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => landingPage(index: 0)));
       }).onError((error, stackTrace) {
         setState(() {
           _isLoading = false;
@@ -289,7 +308,7 @@ class _CameraPageState extends State<CameraPage> {
         if (value != 'error') {
           String downloadUrl = value;
           storyData = {
-            'authorName': widget.userName,
+            'authorName': userName,
             'authorID': FirebaseAuth.instance.currentUser!.uid,
             'time': DateTime.now().millisecondsSinceEpoch,
             'imageUrl': downloadUrl,
@@ -303,8 +322,8 @@ class _CameraPageState extends State<CameraPage> {
         setState(() {
           _isLoading = false;
         });
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Homepg()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => landingPage(index: 0)));
       }).onError((error, stackTrace) {
         setState(() {
           _isLoading = false;

@@ -77,7 +77,9 @@ class Chat extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: Nav(),
+      bottomNavigationBar: Nav(
+        index: 2,
+      ),
     );
   }
 }

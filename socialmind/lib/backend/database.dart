@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:http/http.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:socialmind/backend/storage.dart';
 
 class Database {
@@ -219,10 +217,10 @@ class Database {
   Future getStories() async {
     try {
       DocumentSnapshot doc = await userCollection.doc(uid).get();
-
-      QuerySnapshot snapshot = await storyCollection
-          .where('authorID', whereIn: doc['friendList'])
-          .get();
+      List friendList = doc['friendList'];
+      friendList.add(uid);
+      QuerySnapshot snapshot =
+          await storyCollection.where('authorID', whereIn: friendList).get();
       return snapshot;
     } catch (e) {
       print(e);
