@@ -317,13 +317,13 @@ class _SignupState extends State<Signup> {
           );
 
           print(uid);
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //         builder: (context) =>
-          //             verifyEmail(email: email!, password: password!)));\
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => landingPage(index: 0)));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      verifyEmail(email: email!, password: password!)));
+          // Navigator.push(context,
+          //     MaterialPageRoute(builder: (context) => landingPage(index: 0)));
         } else {
           setState(() {
             _isLoading = false;

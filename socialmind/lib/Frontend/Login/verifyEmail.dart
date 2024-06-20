@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:socialmind/Frontend/StartPage.dart';
 import 'package:socialmind/Frontend/homepg.dart';
+import 'package:socialmind/Frontend/landingPage.dart';
 import 'package:socialmind/backend/authentication.dart';
 
 class verifyEmail extends StatefulWidget {
@@ -144,8 +145,8 @@ class _verifyEmailState extends State<verifyEmail> {
           content: Text("Email has been verified"),
           backgroundColor: Colors.green,
         ));
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Homepg()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => landingPage(index: 0)));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("Email hasn't been verified yet"),

@@ -79,6 +79,7 @@ class Database {
     try {
       DocumentSnapshot doc = await userCollection.doc(uid).get();
       List friendList = doc['friendList'];
+      friendList.add(uid);
       QuerySnapshot snapshot =
           await postCollection.where('authorID', whereIn: friendList).get();
       return snapshot;
