@@ -169,12 +169,12 @@ class _HomepgState extends State<Homepg> {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Colors.white,
-                  Colors.white,
+                  Colors.deepOrangeAccent,
+                  Colors.deepPurpleAccent,
                 ],
               ),
               borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(20), // Adjust the curve as needed
+                bottom: Radius.circular(0), // Adjust the curve as needed
               ),
             ),
           ),
