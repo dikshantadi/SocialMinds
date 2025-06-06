@@ -57,9 +57,9 @@ class _MessagingPageState extends State<MessagingPage> {
                   Colors.deepPurpleAccent,
                 ],
               ),
-              borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(20),
-              ),
+              // borderRadius: BorderRadius.vertical(
+              //   bottom: Radius.circular(20),
+              // ),
             ),
           ),
           leading: IconButton(
@@ -83,8 +83,11 @@ class _MessagingPageState extends State<MessagingPage> {
           ? Center(child: CircularProgressIndicator())
           : _friends.isEmpty
               ? Center(child: Text('No friends found'))
-              : ListView.builder(
+              : ListView.separated(
                   itemCount: _friends.length,
+                  separatorBuilder: (context, index) => SizedBox(
+                    height: 2,
+                  ),
                   itemBuilder: (context, index) {
                     var friend = _friends[index];
                     var friendId = friend['user1'] ==
@@ -104,6 +107,9 @@ class _MessagingPageState extends State<MessagingPage> {
                           var data =
                               snapshot.data!.data() as Map<String, dynamic>;
                           return ListTile(
+                            tileColor: Colors.grey[200],
+                            hoverColor: Colors.grey[400],
+                            leading: CircleAvatar(child: Icon(Icons.person)),
                             title: Text(data['userName']),
                             subtitle: Text(data['email']),
                             onTap: () => Navigator.push(
@@ -116,7 +122,10 @@ class _MessagingPageState extends State<MessagingPage> {
                             ),
                           );
                         }
-                        return CircularProgressIndicator();
+                        return ListTile(
+                          leading: Icon(Icons.person),
+                          trailing: CircularProgressIndicator(),
+                        );
                       },
                     );
                   },

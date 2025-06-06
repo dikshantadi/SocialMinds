@@ -146,7 +146,8 @@ class _ChatPageState extends State<ChatPage> {
       return;
     }
 
-    await _databaseService.sendMessage(widget.friendId, _messageController.text.trim());
+    await _databaseService.sendMessage(
+        widget.friendId, _messageController.text.trim());
     _messageController.clear();
   }
 
@@ -172,9 +173,9 @@ class _ChatPageState extends State<ChatPage> {
                   Colors.deepPurpleAccent,
                 ],
               ),
-              borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(20),
-              ),
+              // borderRadius: BorderRadius.vertical(
+              //   bottom: Radius.circular(20),
+              // ),
             ),
           ),
           title: Text(
@@ -202,16 +203,21 @@ class _ChatPageState extends State<ChatPage> {
                   reverse: true,
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
-                    var message = messages[index].data() as Map<String, dynamic>;
+                    var message =
+                        messages[index].data() as Map<String, dynamic>;
                     var isMe = message['sender'] == currentUser!.uid;
 
                     return ListTile(
                       title: Align(
-                        alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+                        alignment:
+                            isMe ? Alignment.centerRight : Alignment.centerLeft,
                         child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 15),
                           decoration: BoxDecoration(
-                            color: isMe ? Colors.deepOrangeAccent : Colors.deepPurpleAccent,
+                            color: isMe
+                                ? Colors.deepOrangeAccent
+                                : Colors.deepPurpleAccent,
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
@@ -253,4 +259,3 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 }
-
