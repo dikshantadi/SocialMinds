@@ -228,6 +228,7 @@ class _commentState extends State<comment> {
                           itemBuilder: (context, index) {
                             final time = commentSnapshot!.docs[index]['time'];
                             return ListTile(
+                              tileColor: Colors.grey[200],
                               leading: CircleAvatar(
                                 child: InkWell(
                                   onTap: () {
